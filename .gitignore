@@ -4,3 +4,10 @@
 
 # visual files
 *.bmp
+*.png
+*.vtk
+
+# in SimpleSlab
+
+SimpleSlab/*
+! SimpleSlab/SimpleSlab_RR SimpleSlab/SimpleSlab_MC SimpleSlab/SimpleSlab_MC_mg

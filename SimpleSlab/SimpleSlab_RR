@@ -1,0 +1,222 @@
+type randomRayPhysicsPackage; 
+//type eigenPhysicsPackage;
+
+pop      1750; //1750
+active   500; // 500 //1700 
+inactive 500; 
+dead     20;  
+termination 220;  
+plot 1;
+cache 1;
+// printFlux 1;
+XSdata   mg; 
+dataType mg;
+outputFile SimpleSlab_RR_output;
+
+seed  -29501819;
+
+// fissionRate needs a fission map
+
+fissionMap {type multiMap;
+            maps (xax yax);
+            xax { type spaceMap; axis x; grid lin; min -20; max 20; N 50;}
+            yax { type spaceMap; axis y; grid lin; min -20; max 20; N 50;}
+}
+fluxMap {type multiMap;
+            maps (xax yax);
+            xax { type spaceMap; axis x; grid lin; min -20; max 20; N 50;}
+            yax { type spaceMap; axis y; grid lin; min -20; max 20; N 50;}
+}
+             
+
+geometry {
+  type geometryStd;
+  // 0 - vacuum 1 - reflective 2 - periodic
+  // boundary (1 1 1 1 1 1);
+    // boundary (0 0 0 0 0 0 );
+    boundary (0 0 0 0 1 1 );
+  graph {type extended;} 
+
+surfaces {
+    boundingSurface { id 80; type zSquareCylinder; origin (0 0 0) ; halfwidth (20 20 20);} // set halfwidth vertical to 20 
+
+  }
+
+
+  cells { 
+
+  }
+
+
+universes {
+
+  root {id 999; type rootUniverse; border 80; fill u<50>;}
+
+  // Infinite moderator
+  fuelBlock { id 30; type pinUniverse; radii (0.0); fills (UOX_H2O);}     
+
+
+  // latFine{
+  // id 40;
+  // type latUniverse;
+  // origin (0.0 0.0 0.0);
+  // pitch (2 0.8 0);
+  // shape (2 5 0);
+  // padMat UOX_H2O;
+  // map (
+  // 30 30 30 30 30  
+  // 30 30 30 30 30  
+  
+
+  
+  // );
+  // }
+
+  //   latFine{
+  // id 40;
+  // type latUniverse;
+  // origin (0.0 0.0 0.0);
+  // pitch (2 2 0);
+  // shape (2 2 0);
+  // padMat UOX_H2O;
+  // map (
+  // 30 30 
+  // 30 30 
+
+  
+  // );
+  // }
+
+      latFine{
+  id 40;
+  type latUniverse;
+  origin (0.0 0.0 0.0);
+  pitch (0.5 0.5 0);
+  shape (16 16 0);
+  padMat UOX_H2O;
+  map (
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+  30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+
+  
+  );
+  }
+
+  //       latFine{
+  // id 40;
+  // type latUniverse;
+  // origin (0.0 0.0 0.0);
+  // pitch (0.4 0.4 0);
+  // shape (10 10 0);
+  // padMat UOX_H2O;
+  // map (
+  // 30 30 30 30 30 30 30 30 30 30 
+  // 30 30 30 30 30 30 30 30 30 30 
+  // 30 30 30 30 30 30 30 30 30 30 
+  // 30 30 30 30 30 30 30 30 30 30 
+  // 30 30 30 30 30 30 30 30 30 30 
+  // 30 30 30 30 30 30 30 30 30 30 
+  // 30 30 30 30 30 30 30 30 30 30 
+  // 30 30 30 30 30 30 30 30 30 30 
+  // 30 30 30 30 30 30 30 30 30 30 
+  // 30 30 30 30 30 30 30 30 30 30 
+  
+  // );
+  // }
+
+  latCoarse {
+    id 50;
+  type latUniverse;
+  origin (0.0 0.0 0.0);
+  pitch (8 8 0.0);
+  shape (10 10 0);
+  padMat UOX_H2O;
+  map (
+  40 40 40 40 40 40 40 40 40 40
+  40 40 40 40 40 40 40 40 40 40
+  40 40 40 40 40 40 40 40 40 40
+  40 40 40 40 40 40 40 40 40 40
+  40 40 40 40 40 40 40 40 40 40
+  40 40 40 40 40 40 40 40 40 40
+  40 40 40 40 40 40 40 40 40 40
+  40 40 40 40 40 40 40 40 40 40
+  40 40 40 40 40 40 40 40 40 40
+  40 40 40 40 40 40 40 40 40 40
+  );
+
+  }
+
+
+       
+  }
+}
+
+viz {
+  myVTK {
+    type vtk;
+    what uniqueID; 
+    corner (-20 -20 -1.0);
+    width (40 40 40);
+    vox (2000 2000 1);
+  }
+  bmpID { 
+    type bmp; 
+    output SimpleSlab_id; 
+    what uniqueID; 
+    centre (0.0 0.0 10.0); 
+    axis z; 
+    res (2000 2000);  }
+  bmpMat { 
+    type bmp; 
+    output SimpleSlab_mat; 
+    what material; 
+    centre (0.0 0.0 10.0); 
+    axis z; 
+    res (500 500);  }
+} 
+
+
+nuclearData {
+  handles { 
+    mg { type baseMgNeutronDatabase; PN P0;} 
+  } 
+
+materials {
+
+//mix of uranium and water
+UOX_H2O { 
+      temp 100; // shouldn't matter
+      composition {
+
+      }
+      // moder { 1001.06 (hh2o.06); }
+      xsFile UO2_H2O_vacuumBC3G;
+      // xsFile UO2_H2O_vacuumBC4G;
+      // xsFile UO2_H2O_vacuum_1G;
+      // xsFile UO2_H2O_reflectBC_1G;
+      // xsFile UO2_H2O_reflectBC3G;
+      // xsFile UO2_H2O_reflectBC2G;
+      
+}
+
+
+
+}
+
+}
+
+

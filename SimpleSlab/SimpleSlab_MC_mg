@@ -1,0 +1,138 @@
+!!
+!! Quarter HPC
+!!
+type eigenPhysicsPackage; // try tro specifgy the initial source / play with entropy 
+
+pop      20000; // could increase to 500k
+active   10000; //2500;  // was 200... try 2000, to reduce variance in k
+inactive 50; // seems to converge by about 40 
+XSdata mgData; 
+dataType mg;
+
+
+// Specify output format default asciiMATLAB
+outputFormat asciiJSON;
+outputFile output;
+
+collisionOperator { neutronMG {type neutronMGstd;} }
+
+transportOperator {
+                   type transportOperatorHT;
+                   }
+
+inactiveTally {
+  shannon {
+	    type shannonEntropyClerk;
+            map {type multiMap;
+            maps (xax yax);
+            xax { type spaceMap; grid lin; min -20; max 20; N 50; axis x;}
+            yax { type spaceMap; grid lin; min -20; max 20; N 50; axis y;} // cover the fissile core
+            // zax { type spaceMap; grid lin; min -183; max 183; N 20; axis z;}
+                }
+           cycles 800; // can choose some large number which islarger than total number of cycles
+          }
+}
+
+activeTally {
+
+  // macroResponse: used to store macroscopic reaction rates. MT: MT number of the desired reaction. The options are: -1 total, -2 capture, -6 fission, -7 nu*fission, -21 absorption
+  
+  pinFiss  { type collisionClerk; response (flux fission); 
+                flux {type fluxResponse;}
+                fission { type macroResponse; MT -6;} // -6 is fission rate
+                   map {type multiMap; maps (xax yax);
+                      xax {type spaceMap;  axis x;  grid lin; N 187; min -20; max 20; } //N= 289 , min -10.81; max 10.81
+                      yax {type spaceMap;  axis y;  grid lin; N 187; min -20; max 20; } //N= 289
+
+
+                   }
+                 } 
+
+  scatteringMatrices { type mgXsClerk; 
+                  // energyMap {type energyMap; grid predef; name casmo23;}
+                  energyMap {type energyMap; grid log; min 1e-11; max 2e1; N 3;} // in MeV
+                  // multiMap {type multiMap; maps (xax yax);
+                      // xax {type spaceMap;  axis x;  grid lin; N 4; min -20; max 20; } //N= 289 , min -10.81; max 10.81
+                      // yax {type spaceMap;  axis y;  grid lin; N 4; min -20; max 20; } //N= 289
+                      // energyMap {type energyMap; grid log; min 1e-11; max 2e1; N 3;} // in MeV
+
+                  // }
+                  
+                  // energyMap1G {type energyMap; grid log; min 1e-11; max 2e1; N 1;} // in MeV
+                  PN 1;
+
+
+  }
+
+}
+
+geometry {
+  type geometryStd;
+  // 0 - vacuum 1 - reflective 2 - periodic
+  boundary (0 0 0 0 0 0 ); // quarter slab
+  // boundary (1 1 1 1 1 1);
+  graph {type shrunk;} 
+
+surfaces {
+    boundingSurface { id 80; type zSquareCylinder; origin (0 0 0) ; halfwidth (20 20 0);} // halfwidth (20 20 0)
+
+  }
+
+
+  cells { 
+
+  }
+
+
+universes {
+
+  root {id 999; type rootUniverse; border 80; fill UOX_H2O;}
+       
+  }
+}
+
+
+viz {
+
+  bmpz {
+    type bmp;
+    output radial;
+    what material;
+    centre (0.0 0.0 0.0);
+    axis z;
+    res (1000 1000);
+  }
+
+}
+
+
+nuclearData {
+  handles {
+    // ce {type aceNeutronDatabase; aceLibrary $SCONE_ACE;}
+    mgData {type baseMgNeutronDatabase;  PN P0;}
+  }
+
+materials {
+
+//mix of uranium and water
+UOX_H2O { 
+  temp 100;
+      composition {
+      // 92235.06 5.2043958E-04; // density = 10.97 g/cm^3 for UO2   https://www.nuclear-power.com/nuclear-power-plant/nuclear-fuel/fuel-assembly/fuel-pellets/uranium-dioxide-uo2/
+      // 92238.06 2.3956569E-02;  
+      // 8016.06	2.34E-02;
+      // 1001.06	4.68E-02;
+      }
+      // moder { 1001.06 (hh2o.06); }
+      xsFile UO2_H2O_vacuumBC3G;
+      // xsFile UO2_H2O_vacuumBC4G;
+      // xsFile UO2_H2O_vacuum_1G;
+      // xsFile UO2_H2O_reflectBC_1G;
+      // xsFile UO2_H2O_reflectBC3G;
+      // xsFile UO2_H2O_reflectBC2G;
+}
+
+
+
+}
+}

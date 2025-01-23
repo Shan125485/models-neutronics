@@ -52,7 +52,7 @@ activeTally {
                   // energyMap {type energyMap; grid predef; name casmo23;}
                   
                   energyMap {type energyMap; grid log; min 1e-11; max 2e1; N 3;} // in MeV
-                  spacemap { type materialMap; materials (fuel water ); undefBin T; }
+                  spaceMap { type materialMap; materials (fuel water ); undefBin T; }
                   matN      2;
                   energyN 3;
 

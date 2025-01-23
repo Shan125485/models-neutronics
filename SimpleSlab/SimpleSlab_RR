@@ -204,7 +204,7 @@ UOX_H2O {
 
       }
       // moder { 1001.06 (hh2o.06); }
-      xsFile UO2_H2O_vacuumBC3G;
+      xsFile materialsInputs/UO2_H2O_vacuumBC3G;
       // xsFile UO2_H2O_vacuumBC4G;
       // xsFile UO2_H2O_vacuum_1G;
       // xsFile UO2_H2O_reflectBC_1G;

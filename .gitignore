@@ -10,4 +10,4 @@
 # in SimpleSlab
 
 SimpleSlab/*
-! SimpleSlab/SimpleSlab_RR SimpleSlab/SimpleSlab_MC SimpleSlab/SimpleSlab_MC_mg
+! SimpleSlab/SimpleSlab_RR SimpleSlab/SimpleSlab_MC SimpleSlab/SimpleSlab_MC_mg SimpleSlab/UO2_H2O_*

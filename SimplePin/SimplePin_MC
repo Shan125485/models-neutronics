@@ -4,7 +4,7 @@
 type eigenPhysicsPackage; // try tro specifgy the initial source / play with entropy 
 
 pop      20000; // could increase to 500k
-active   10; //2500;  // was 200... try 2000, to reduce variance in k
+active  2500;  // was 200... try 2000, to reduce variance in k
 inactive 50; // seems to converge by about 40 
 XSdata ce; 
 dataType ce;
@@ -140,7 +140,7 @@ water {
       8016.06	0.023422777777777775;
       1001.06	0.04684555555555555;
       }
-      moder { 1001.06  (hh2o.06) ; }
+      moder { 1001.06  hh2o.06 ; }
       
 }
 

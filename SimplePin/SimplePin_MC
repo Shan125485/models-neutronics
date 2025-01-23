@@ -4,7 +4,7 @@
 type eigenPhysicsPackage; // try tro specifgy the initial source / play with entropy 
 
 pop      20000; // could increase to 500k
-active  2500;  // was 200... try 2000, to reduce variance in k
+active  50000;  // was 200... try 2000, to reduce variance in k
 inactive 50; // seems to converge by about 40 
 XSdata ce; 
 dataType ce;
@@ -41,8 +41,8 @@ activeTally {
                 flux {type fluxResponse;}
                 fission { type macroResponse; MT -6;} // -6 is fission rate
                    map {type multiMap; maps (xax yax);
-                      xax {type spaceMap;  axis x;  grid lin; N 20; min -0.63; max 0.63; } //N= 289 , min -10.81; max 10.81
-                      yax {type spaceMap;  axis y;  grid lin; N 20; min -0.63; max 0.63; } //N= 289
+                      xax {type spaceMap;  axis x;  grid lin; N 50; min -0.63; max 0.63; } //N= 289 , min -10.81; max 10.81
+                      yax {type spaceMap;  axis y;  grid lin; N 50; min -0.63; max 0.63; } //N= 289
 
 
                    }

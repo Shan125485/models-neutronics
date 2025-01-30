@@ -4,7 +4,7 @@
 type eigenPhysicsPackage; // try tro specifgy the initial source / play with entropy 
 
 pop      20000; // could increase to 500k
-active   1000; //2500;  // was 200... try 2000, to reduce variance in k
+active   4000; //2500;  // was 200... try 2000, to reduce variance in k
 inactive 50; // seems to converge by about 40 
 XSdata ce; 
 dataType ce;
@@ -37,20 +37,21 @@ activeTally {
 
   // macroResponse: used to store macroscopic reaction rates. MT: MT number of the desired reaction. The options are: -1 total, -2 capture, -6 fission, -7 nu*fission, -21 absorption
   
-  pinFiss  { type collisionClerk; response (flux fission); 
-                flux {type fluxResponse;}
-                fission { type macroResponse; MT -6;} // -6 is fission rate
-                   map {type multiMap; maps (xax yax);
-                      xax {type spaceMap;  axis x;  grid lin; N 187; min -20; max 20; } //N= 289 , min -10.81; max 10.81
-                      yax {type spaceMap;  axis y;  grid lin; N 187; min -20; max 20; } //N= 289
-
-
-                   }
-                 } 
+//  pinFiss  { type collisionClerk; response (flux fission); 
+  //              flux {type fluxResponse;}
+    //            fission { type macroResponse; MT -6;} // -6 is fission rate
+      //             map {type multiMap; maps (xax yax);
+        //             xax {type spaceMap;  axis x;  grid lin; N 187; min -20; max 20; } //N= 289 , min -10.81; max 10.81
+         //             yax {type spaceMap;  axis y;  grid lin; N 187; min -20; max 20; } //N= 289
+//
+//
+  //                 }
+    //             } 
 
   scatteringMatrices { type mgXsClerk; 
-                  // energyMap {type energyMap; grid predef; name casmo23;}
-                  energyMap {type energyMap; grid log; min 1e-11; max 2e1; N 3;} // in MeV
+                   //energyMap {type energyMap; grid predef; name casmo23;}
+		energyMap {type energyMap; grid predef; name casmo12;}	
+                  //energyMap {type energyMap; grid log; min 1e-11; max 2e1; N 3;} // in MeV
                       //       multiMap {type multiMap; maps (xax yax energyMap);
                       // energyMap {type energyMap; grid log; min 1e-11; max 2e1; N 3;} // in MeV
                       // xax {type spaceMap;  axis x;  grid lin; N 16; min -20; max 20; } //N= 289 , min -10.81; max 10.81
@@ -66,9 +67,8 @@ activeTally {
 geometry {
   type geometryStd;
   // 0 - vacuum 1 - reflective 2 - periodic
-  boundary (0 0 0 0 1 1 );
-  //  boundary (0 1 1 0 0 0); // quarter slab
-  // boundary (1 1 1 1 1 1);
+  //boundary (0 0 0 0 1 1 );
+  boundary (1 1 1 1 1 1);
   graph {type shrunk;} 
 
 surfaces {

@@ -2,7 +2,7 @@ type randomRayPhysicsPackage;
 //type eigenPhysicsPackage;
 
 pop      1750; //1750
-active   500; // 500 //1700 
+active   600; // 500 //1700 
 inactive 500; 
 dead     20;  
 termination 220;  
@@ -32,9 +32,9 @@ fluxMap {type multiMap;
 geometry {
   type geometryStd;
   // 0 - vacuum 1 - reflective 2 - periodic
-  // boundary (1 1 1 1 1 1);
+  boundary (1 1 1 1 1 1);
     // boundary (0 0 0 0 0 0 );
-    boundary (0 0 0 0 1 1 );
+   // boundary (0 0 0 0 1 1 );
   graph {type extended;} 
 
 surfaces {
@@ -204,7 +204,8 @@ UOX_H2O {
 
       }
       // moder { 1001.06 (hh2o.06); }
-      xsFile materialsInputs/UO2_H2O_vacuumBC3G;
+	xsFile materialsInputs/material;
+      //xsFile materialsInputs/UO2_H2O_vacuumBC3G;
       // xsFile UO2_H2O_vacuumBC4G;
       // xsFile UO2_H2O_vacuum_1G;
       // xsFile UO2_H2O_reflectBC_1G;

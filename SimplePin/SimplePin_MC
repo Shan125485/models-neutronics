@@ -4,7 +4,7 @@
 type eigenPhysicsPackage; // try tro specifgy the initial source / play with entropy 
 
 pop      20000; // could increase to 500k
-active  50000;  // was 200... try 2000, to reduce variance in k
+active  2000;  // was 200... try 2000, to reduce variance in k
 inactive 50; // seems to converge by about 40 
 XSdata ce; 
 dataType ce;
@@ -49,10 +49,10 @@ activeTally {
                  } 
 
   scatteringMatrices { type mgXsClerk; 
-                  // energyMap {type energyMap; grid predef; name casmo23;}
+                   energyMap {type energyMap; grid predef; name casmo23;}
                   
-                  energyMap {type energyMap; grid log; min 1e-11; max 2e1; N 3;} // in MeV
-                  spaceMap { type materialMap; materials (fuel water ); undefBin F; }
+                  //energyMap {type energyMap; grid log; min 1e-11; max 2e1; N 3;} // in MeV
+                  spaceMap { type materialMap; materials (fuel water );undefBin F; }
               
 
                   PN 1;

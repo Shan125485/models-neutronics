@@ -4,7 +4,7 @@
 type randomRayPhysicsPackage;  // try tro specifgy the initial source / play with entropy 
 
 pop      1750; //1750
-active   30; // 500 //1700 
+active   500; // 500 //1700 
 inactive 100; // 500
 dead     20;  
 termination 220;  
@@ -98,7 +98,7 @@ fuel {
       composition {  
         
         }
-      xsFile materialsInputs/UO2 ;
+      xsFile materialsInputs/fuel ;
 
       }
 
@@ -106,7 +106,7 @@ water {
       temp 0;
       composition {}
 
-      xsFile materialsInputs/H2O ;
+      xsFile materialsInputs/water ;
       // xsFile ../SimpleSlab/materialsInputs/UO2_H2O_reflectBC3G ;
  
 

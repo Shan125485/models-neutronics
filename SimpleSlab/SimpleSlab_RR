@@ -2,15 +2,17 @@ type randomRayPhysicsPackage;
 //type eigenPhysicsPackage;
 
 pop      1750; //1750
-active   600; // 500 //1700 
-inactive 500; 
+active   500; // 500 //1700 
+inactive 300; 
 dead     20;  
 termination 220;  
-plot 1;
+//  plot 1;
+plot 0;
 cache 1;
 // printFlux 1;
 XSdata   mg; 
 dataType mg;
+outputFormat asciiJSON;
 outputFile SimpleSlab_RR_output;
 
 seed  -29501819;
@@ -19,13 +21,13 @@ seed  -29501819;
 
 fissionMap {type multiMap;
             maps (xax yax);
-            xax { type spaceMap; axis x; grid lin; min -20; max 20; N 50;}
-            yax { type spaceMap; axis y; grid lin; min -20; max 20; N 50;}
+            xax { type spaceMap; axis x; grid lin; min -20; max 20; N 40;}
+            yax { type spaceMap; axis y; grid lin; min -20; max 20; N 40;}
 }
 fluxMap {type multiMap;
             maps (xax yax);
-            xax { type spaceMap; axis x; grid lin; min -20; max 20; N 50;}
-            yax { type spaceMap; axis y; grid lin; min -20; max 20; N 50;}
+            xax { type spaceMap; axis x; grid lin; min -20; max 20; N 40;}
+            yax { type spaceMap; axis y; grid lin; min -20; max 20; N 40;}
 }
              
 
@@ -38,7 +40,7 @@ geometry {
   graph {type extended;} 
 
 surfaces {
-    boundingSurface { id 80; type zSquareCylinder; origin (0 0 0) ; halfwidth (20 20 20);} // set halfwidth vertical to 20 
+    boundingSurface { id 80; type zSquareCylinder; origin (0 0 0) ; halfwidth (20 20 5);} // set halfwidth vertical to 20 
 
   }
 
@@ -91,8 +93,8 @@ universes {
   id 40;
   type latUniverse;
   origin (0.0 0.0 0.0);
-  pitch (0.5 0.5 0);
-  shape (16 16 0);
+  pitch (0.501 0.501 0);
+  shape (8 8 0);
   padMat UOX_H2O;
   map (
   30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
@@ -142,7 +144,7 @@ universes {
     id 50;
   type latUniverse;
   origin (0.0 0.0 0.0);
-  pitch (8 8 0.0);
+  pitch (4.00 4.00 0.0);
   shape (10 10 0);
   padMat UOX_H2O;
   map (
@@ -171,7 +173,7 @@ viz {
     what uniqueID; 
     corner (-20 -20 -1.0);
     width (40 40 40);
-    vox (2000 2000 1);
+    vox (200 200 1);
   }
   bmpID { 
     type bmp; 
@@ -205,6 +207,7 @@ UOX_H2O {
       }
       // moder { 1001.06 (hh2o.06); }
 	xsFile materialsInputs/material;
+  // xsFile materialsInputs/material_23G_vacuum;
       //xsFile materialsInputs/UO2_H2O_vacuumBC3G;
       // xsFile UO2_H2O_vacuumBC4G;
       // xsFile UO2_H2O_vacuum_1G;

@@ -3,16 +3,17 @@
 !!
 type randomRayPhysicsPackage;  // try tro specifgy the initial source / play with entropy 
 
-pop      1750; //1750
-active   500; // 500 //1700 
+pop      2000; //1750
+active   200; // 500 //1700 
 inactive 100; // 500
 dead     20;  
 termination 220;  
-plot 1;
+plot 0;
 cache 1;
 // printFlux 1;
 XSdata   mg; 
 dataType mg;
+outputFormat asciiJSON;
 outputFile SimplePin_RR_output;
 
 seed  -29501819;
@@ -20,16 +21,23 @@ seed  -29501819;
 
 // fissionRate needs a fission map
 
-// fissionMap {type multiMap;
-//             maps (xax yax);
-//             xax { type spaceMap; axis x; grid lin; min -20; max 20; N 50;}
-//             yax { type spaceMap; axis y; grid lin; min -20; max 20; N 50;}
-// }
-// fluxMap {type multiMap;
-//             maps (xax yax);
-//             xax { type spaceMap; axis x; grid lin; min -20; max 20; N 50;}
-//             yax { type spaceMap; axis y; grid lin; min -20; max 20; N 50;}
-// }
+fissionMap {
+           type radialMap; axis z; origin (0.0 0.0 0.0); grid unstruct; bins (0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.475 0.5 0.55 0.6 0.63); 
+  
+            // type multiMap;
+            // maps (xax yax);
+
+            // xax { type spaceMap; axis x; grid lin; min -0.63; max 0.63; N 40;}
+            // yax { type spaceMap; axis y; grid lin; min -0.63; max 0.63; N 40;}
+}
+fluxMap {
+  type radialMap; axis z; origin (0.0 0.0 0.0); grid unstruct; bins (0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.475 0.5 0.55 0.6 0.63); 
+  // type multiMap;
+
+  //           maps (xax yax);
+  //           xax { type spaceMap; axis x; grid lin; min -0.63; max 0.63; N 40;}
+  //           yax { type spaceMap; axis y; grid lin; min -0.63; max 0.63; N 40;}
+}
              
 
 geometry {
@@ -40,7 +48,7 @@ geometry {
   graph {type extended;} 
 
 surfaces {
-    boundingSurface { id 80; type zSquareCylinder; origin (0 0 0) ; halfwidth (0.63 0.63 20);} // halfwidth (0.63 0.63 2)
+    boundingSurface { id 80; type zSquareCylinder; origin (0 0 0) ; halfwidth (0.63 0.63 2);} // halfwidth (0.63 0.63 2)
 
   }
 
@@ -53,8 +61,24 @@ surfaces {
 universes {
 
   root {id 999; type rootUniverse; border 80; fill u<1000>;}
-  pin {id 1000; type pinUniverse; radii ( 0.475 0.0 ); fills (fuel water);}
-       
+  // pin {id 1000; type pinUniverse; radii ( 0.475 0.0 ); fills (fuel water);}
+  // pin {id 1000; type pinUniverse; radii (0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.475 0.5 0.55 0.6 0.0 ); fills (fuel fuel fuel fuel fuel fuel fuel fuel fuel fuel water water water water);}
+
+  // pin {id 1000; type pinUniverse;
+  //   radii (0.15 0.3 0.4 0.475 0.55 0.6 0.0);
+  //   fills (fuel fuel fuel fuel water water water);
+  // }
+
+  pin
+  {
+    id 1000;
+    type azimPinUniverse;
+    naz 16;
+    // radii (0.15 0.3 0.4  0.475 0.55 0.6 0.0);
+    // radii (0.15 0.3 0.4  0.475 0.55 0.6 0.7 0.0);
+    radii (0.15 0.3 0.4  0.475 0.55 0.6 0.65 0.75 0.0);
+    fills (fuel fuel fuel fuel water water water water water);
+  }
   }
 }
 
@@ -107,7 +131,6 @@ water {
       composition {}
 
       xsFile materialsInputs/water ;
-      // xsFile ../SimpleSlab/materialsInputs/UO2_H2O_reflectBC3G ;
  
 
       

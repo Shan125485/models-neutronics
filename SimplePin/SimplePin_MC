@@ -3,12 +3,13 @@
 !!
 type eigenPhysicsPackage; // try tro specifgy the initial source / play with entropy 
 
-pop      20000; // could increase to 500k
-active  2000;  // was 200... try 2000, to reduce variance in k
+pop      5000; // could increase to 500k
+active  3000;  // was 200... try 2000, to reduce variance in k
 inactive 50; // seems to converge by about 40 
 XSdata ce; 
 dataType ce;
 
+seed -29501819;
 
 // Specify output format default asciiMATLAB
 outputFormat asciiJSON;
@@ -25,8 +26,8 @@ inactiveTally {
 	    type shannonEntropyClerk;
             map {type multiMap;
             maps (xax yax);
-            xax { type spaceMap; grid lin; min -20; max 20; N 50; axis x;}
-            yax { type spaceMap; grid lin; min -20; max 20; N 50; axis y;} // cover the fissile core
+            xax { type spaceMap; grid lin; min -0.63; max 0.63; N 30; axis x;}
+            yax { type spaceMap; grid lin; min -0.63; max 0.63; N 30; axis y;} // cover the fissile core
           
                 }
            cycles 800; // can choose some large number which islarger than total number of cycles
@@ -40,19 +41,34 @@ activeTally {
   pinFiss  { type collisionClerk; response (flux fission); 
                 flux {type fluxResponse;}
                 fission { type macroResponse; MT -6;} // -6 is fission rate
-                   map {type multiMap; maps (xax yax);
-                      xax {type spaceMap;  axis x;  grid lin; N 50; min -0.63; max 0.63; } //N= 289 , min -10.81; max 10.81
-                      yax {type spaceMap;  axis y;  grid lin; N 50; min -0.63; max 0.63; } //N= 289
-
+                  //  map {type multiMap; maps (xax yax);
+                  //     xax {type spaceMap;  axis x;  grid lin; N 126; min -0.63; max 0.63; } //N= 289 , min -10.81; max 10.81
+                  //     yax {type spaceMap;  axis y;  grid lin; N 126; min -0.63; max 0.63; } //N= 289
+                  map {type radialMap; axis z; origin (0.0 0.0 0.0); grid unstruct; bins (0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.475 0.5 0.55 0.6 0.63); 
+  
 
                    }
                  } 
 
+  fluxSpectrum { type collisionClerk; response (flux);
+                flux {type fluxResponse;}
+                map {type energyMap; grid log; min 1e-11; max 2e1; N 8;}
+
+              }
+
   scatteringMatrices { type mgXsClerk; 
-                   energyMap {type energyMap; grid predef; name casmo23;}
                   
-                  //energyMap {type energyMap; grid log; min 1e-11; max 2e1; N 3;} // in MeV
-                  spaceMap { type materialMap; materials (fuel water );undefBin F; }
+                  energyMap {type energyMap; grid log; min 1e-11; max 2e1; N 3;} // in MeV
+                  // directionMap {
+                  //   type directionMap;
+                  //   plane xy;
+                  //   N 4;
+                  //   min -180;
+                  //   max 180;
+                  // }
+                  
+                  spaceMap { type materialMap; materials (fuel water ); }
+                  
               
 
                   PN 1;
@@ -66,14 +82,13 @@ geometry {
   type geometryStd;
   // 0 - vacuum 1 - reflective 2 - periodic
   boundary (1 1 1 1 1 1 );
-  //  boundary (0 1 1 0 0 0); // quarter slab
-  // boundary (1 1 1 1 1 1);
+  // boundary (0 0 0 0 1 1 );
+
   graph {type shrunk;} 
 
 surfaces {
-    boundingSurface { id 80; type zSquareCylinder; origin (0 0 0) ; halfwidth (0.63 0.63 2);} // halfwidth (20 20 0)
+    boundingSurface { id 80; type zSquareCylinder; origin (0 0 0) ; halfwidth (0.63 0.63 2);} 
     
-  
 
   }
 

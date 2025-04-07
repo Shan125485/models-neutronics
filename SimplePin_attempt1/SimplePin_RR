@@ -1,0 +1,119 @@
+!!
+!! pin
+!!
+type randomRayPhysicsPackage;  // try tro specifgy the initial source / play with entropy 
+
+pop      1750; //1750
+active   500; // 500 //1700 
+inactive 100; // 500
+dead     20;  
+termination 220;  
+plot 1;
+cache 1;
+// printFlux 1;
+XSdata   mg; 
+dataType mg;
+outputFile SimplePin_RR_output;
+
+seed  -29501819;
+
+
+// fissionRate needs a fission map
+
+// fissionMap {type multiMap;
+//             maps (xax yax);
+//             xax { type spaceMap; axis x; grid lin; min -20; max 20; N 50;}
+//             yax { type spaceMap; axis y; grid lin; min -20; max 20; N 50;}
+// }
+// fluxMap {type multiMap;
+//             maps (xax yax);
+//             xax { type spaceMap; axis x; grid lin; min -20; max 20; N 50;}
+//             yax { type spaceMap; axis y; grid lin; min -20; max 20; N 50;}
+// }
+             
+
+geometry {
+  type geometryStd;
+  // 0 - vacuum 1 - reflective 2 - periodic
+  boundary (1 1 1 1 1 1 );
+
+  graph {type extended;} 
+
+surfaces {
+    boundingSurface { id 80; type zSquareCylinder; origin (0 0 0) ; halfwidth (0.63 0.63 20);} // halfwidth (0.63 0.63 2)
+
+  }
+
+
+  cells { 
+
+  }
+
+
+universes {
+
+  root {id 999; type rootUniverse; border 80; fill u<1000>;}
+  pin {id 1000; type pinUniverse; radii ( 0.475 0.0 ); fills (fuel water);}
+       
+  }
+}
+
+
+viz {
+  myVTK {
+    type vtk;
+    what uniqueID; 
+    corner (-0.63 -0.63 0);
+    width (1.26 1.26 0);
+    vox (2000 2000 1);
+  }
+  bmpID { 
+    type bmp; 
+    output SimplePin_id; 
+    what uniqueID; 
+    centre (0.0 0.0 0); 
+    axis z; 
+    res (2000 2000);  }
+  bmpMat { 
+    type bmp; 
+    output SimpleSPin_mat; 
+    what material; 
+    centre (0.0 0.0 0); 
+    axis z; 
+    res (500 500);  }
+} 
+
+
+nuclearData {
+  handles {
+    mg {type baseMgNeutronDatabase; PN P0;}
+  }
+
+materials {
+
+
+//mix of uranium and water
+fuel { 
+      temp 0;
+      composition {  
+        
+        }
+      xsFile materialsInputs/fuel ;
+
+      }
+
+water { 
+      temp 0;
+      composition {}
+
+      xsFile materialsInputs/water ;
+      // xsFile ../SimpleSlab/materialsInputs/UO2_H2O_reflectBC3G ;
+ 
+
+      
+  } 
+
+
+}
+}
+

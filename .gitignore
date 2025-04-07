@@ -6,6 +6,7 @@
 *.bmp
 *.png
 *.vtk
+*.svg
 
 # in SimpleSlab
 

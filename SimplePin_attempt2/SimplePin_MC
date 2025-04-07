@@ -1,0 +1,172 @@
+!!
+!! pin
+!!
+type eigenPhysicsPackage; // try tro specifgy the initial source / play with entropy 
+
+pop      100000000; // could increase to 500k
+active  100;  // was 200... try 2000, to reduce variance in k
+inactive 10; // seems to converge by about 40 
+XSdata ce; 
+dataType ce;
+
+seed -29501819;
+
+// Specify output format default asciiMATLAB
+outputFormat asciiJSON;
+outputFile SimplePin_MC_output;
+
+collisionOperator { neutronCE {type neutronCEstd;} }
+
+transportOperator {
+                   type transportOperatorHT;/// HT hybrid, ST surface tracking, DT delta tracking
+                   }
+
+inactiveTally {
+  // shannon {
+	//     type shannonEntropyClerk;
+  //           map {type multiMap;
+  //           maps (xax yax);
+  //           xax { type spaceMap; grid lin; min -0.63; max 0.63; N 30; axis x;}
+  //           yax { type spaceMap; grid lin; min -0.63; max 0.63; N 30; axis y;} // cover the fissile core
+          
+  //               }
+  //          cycles 800; // can choose some large number which islarger than total number of cycles
+  //         }
+}
+
+activeTally {
+
+  // macroResponse: used to store macroscopic reaction rates. MT: MT number of the desired reaction. The options are: -1 total, -2 capture, -6 fission, -7 nu*fission, -21 absorption
+  
+  pinFiss  { type collisionClerk; response (flux fission); 
+                flux {type fluxResponse;}
+                fission { type macroResponse; MT -6;} // -6 is fission rate
+                   map {type multiMap; maps (xax yax);
+                      xax {type spaceMap;  axis x;  grid lin; N 500; min -0.63; max 0.63; } //N= 289 , min -10.81; max 10.81
+                      yax {type spaceMap;  axis y;  grid lin; N 500; min -0.63; max 0.63; } //N= 289
+                  // map {type radialMap; axis z; origin (0.0 0.0 0.0); grid unstruct; bins (0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.475 0.5 0.55 0.6 0.63); 
+  
+
+                   }
+                 } 
+
+  fluxSpectrum { type collisionClerk; response (flux);
+                flux {type fluxResponse;}
+                // map {type energyMap; grid log; min 1e-11; max 2e1; N 8;}
+                map
+                {
+                  type multiMap;
+                  maps (energy material);
+                  material { type materialMap;
+                    materials (fuel water);
+                  }
+                  energy
+                  {
+                    type energyMap;
+                    grid log;
+                    min 1e-11;
+                    max 2e1;
+                    N 70;
+                  }
+                }
+              }
+  scatteringMatrices { type mgXsClerk; 
+                  
+                  energyMap {type energyMap; grid log; min 1e-11; max 2e1; N 70;} // in MeV
+                  // directionMap {
+                  //   type directionMap;
+                  //   plane xy;
+                  //   N 4;
+                  //   min -180;
+                  //   max 180;
+                  // }
+                  
+                  spaceMap { type materialMap; materials (fuel water ); }
+                  
+              
+
+                  PN 1;
+
+
+  }
+
+}
+
+geometry {
+  type geometryStd;
+  // 0 - vacuum 1 - reflective 2 - periodic
+  boundary (1 1 1 1 1 1 );
+  // boundary (0 0 0 0 1 1 );
+
+  graph {type shrunk;} 
+
+surfaces {
+    boundingSurface { id 80; type zSquareCylinder; origin (0 0 0) ; halfwidth (0.63 0.63 2);} 
+    
+
+  }
+
+
+  cells { 
+
+  }
+
+
+universes {
+
+  root {id 999; type rootUniverse; border 80; fill u<1000>;}
+  pin {id 1000; type pinUniverse; radii ( 0.475 0.0 ); fills (fuel water);}
+       
+  }
+}
+
+
+viz {
+
+  bmpz {
+    type bmp;
+    output radial;
+    what material;
+    centre (0.0 0.0 0.0);
+    axis z;
+    res (1000 1000);
+  }
+
+}
+
+
+nuclearData {
+  handles {
+    ce {type aceNeutronDatabase; aceLibrary $SCONE_ACE;}
+  }
+
+materials {
+
+
+//mix of uranium and water
+fuel { 
+      temp 0;
+      composition {
+      92235.06 0.00047608928331513997; // density = 10.97 g/cm^3 for UO2   https://www.nuclear-power.com/nuclear-power-plant/nuclear-fuel/fuel-assembly/fuel-pellets/uranium-dioxide-uo2/
+      92238.06 0.02089755538279577;  
+      8016.06	0.04274728933222181;
+  
+      
+}
+}
+
+water { 
+      temp 0;
+      composition {
+     
+      8016.06	0.023422777777777775;
+      1001.06	0.04684555555555555;
+      }
+      moder { 1001.06  hh2o.06 ; }
+      
+}
+
+
+}
+}
+

@@ -85,11 +85,11 @@ universes {
     type azimPinUniverse;
     naz 8;
     
-    // radii (0.19609 0.277313137 0.339637843 0.39218 0.40005 0.45720 0.562826687 0.651548862 0.729560114 0.0);
-    // fills (fuel1 fuel2 fuel3 fuel4 void clad water1 water2  water3 water4 ); 
+    radii (0.19609 0.277313137 0.339637843 0.39218 0.40005 0.45720 0.562826687 0.651548862 0.729560114 0.0);
+    fills (fuel1 fuel2 fuel3 fuel4 void clad water1 water2  water3 water4 ); 
 
-    radii (0.39218  0.40005 0.45720 0.0  );
-    fills (fuel void clad water);
+    // radii (0.39218  0.40005 0.45720 0.0  );
+    // fills (fuel void clad water);
   }
   }
 }
@@ -125,113 +125,113 @@ nuclearData {
     mg {type baseMgNeutronDatabase; PN P0;}
   }
 
-materials {
+// materials {
 
 
-//mix of uranium and water
-fuel { 
-      temp 0;
-      composition {  
+// //mix of uranium and water
+// fuel { 
+//       temp 0;
+//       composition {  
         
-        }
-      xsFile materialsInputs/fuel ;
+//         }
+//       xsFile materialsInputs/fuel ;
 
-      }
+//       }
 
-water { 
-      temp 0;
-      composition {}
+// water { 
+//       temp 0;
+//       composition {}
 
-      xsFile materialsInputs/water ;
+//       xsFile materialsInputs/water ;
  
 
       
-  }
+//   }
 
-  clad
+//   clad
+//   {
+//     temp 0;
+//     composition
+//     {
+//     }
+//     xsFile materialsInputs/clad;
+//   }
+// }
+
+  materials
   {
-    temp 0;
-    composition
+
+    // mix of uranium and water
+    fuel1
     {
+      temp 0;
+      composition {}
+      xsFile materialsInputs/fuel1;
     }
-    xsFile materialsInputs/clad;
+
+     fuel2
+    {
+      temp 0;
+      composition {}
+      xsFile materialsInputs/fuel2;
+    }
+
+     fuel3
+    {
+      temp 0;
+      composition {}
+      xsFile materialsInputs/fuel3;
+    }
+
+     fuel4
+    {
+      temp 0;
+      composition {}
+      xsFile materialsInputs/fuel4;
+    }
+
+
+    water1
+    {
+      temp 0;
+      composition {}
+
+      xsFile materialsInputs/water1;
+    }
+
+    water2
+    {
+      temp 0;
+      composition {}
+
+      xsFile materialsInputs/water2;
+    }
+
+    water3
+    {
+      temp 0;
+      composition {}
+
+      xsFile materialsInputs/water3;
+    }
+
+    water4
+    {
+      temp 0;
+      composition {}
+
+      xsFile materialsInputs/water4;
+    }
+
+
+    clad
+    {
+      temp 0;
+      composition
+      {
+      }
+      xsFile materialsInputs/clad;
+    }
   }
-}
-
-  // materials
-  // {
-
-  //   // mix of uranium and water
-  //   fuel1
-  //   {
-  //     temp 0;
-  //     composition {}
-  //     xsFile materialsInputs/fuel1;
-  //   }
-
-  //    fuel2
-  //   {
-  //     temp 0;
-  //     composition {}
-  //     xsFile materialsInputs/fuel2;
-  //   }
-
-  //    fuel3
-  //   {
-  //     temp 0;
-  //     composition {}
-  //     xsFile materialsInputs/fuel3;
-  //   }
-
-  //    fuel4
-  //   {
-  //     temp 0;
-  //     composition {}
-  //     xsFile materialsInputs/fuel4;
-  //   }
-
-
-  //   water1
-  //   {
-  //     temp 0;
-  //     composition {}
-
-  //     xsFile materialsInputs/water1;
-  //   }
-
-  //   water2
-  //   {
-  //     temp 0;
-  //     composition {}
-
-  //     xsFile materialsInputs/water2;
-  //   }
-
-  //   water3
-  //   {
-  //     temp 0;
-  //     composition {}
-
-  //     xsFile materialsInputs/water3;
-  //   }
-
-  //   water4
-  //   {
-  //     temp 0;
-  //     composition {}
-
-  //     xsFile materialsInputs/water4;
-  //   }
-
-
-  //   clad
-  //   {
-  //     temp 0;
-  //     composition
-  //     {
-  //     }
-  //     xsFile materialsInputs/clad;
-  //   }
-  // }
 }
 

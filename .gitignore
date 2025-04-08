@@ -12,3 +12,10 @@
 
 SimpleSlab/*
 ! SimpleSlab/SimpleSlab_RR SimpleSlab/SimpleSlab_MC SimpleSlab/SimpleSlab_MC_mg SimpleSlab/materialsInputs/*
+
+
+*__pycache__*
+
+# tutorials
+user_tutorials_SCONE/*
+tutorials_fortran/*

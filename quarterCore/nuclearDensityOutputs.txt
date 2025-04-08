@@ -1,0 +1,22 @@
+
+
+|||||| DISPLAY |||||||
+
+Top level
+{'Fe': <nuclearDataCalculator.obj object at 0x7fc1f3915010>, 'C': <nuclearDataCalculator.obj object at 0x7fc1f38c3c50>, 'Mn': <nuclearDataCalculator.obj object at 0x7fc1f37f8050>, 'Si': <nuclearDataCalculator.obj object at 0x7fc1f3930c30>, 'Ni': <nuclearDataCalculator.obj object at 0x7fc1f3931810>, 'Cr': <nuclearDataCalculator.obj object at 0x7fc1f393f410>, 'Mo': <nuclearDataCalculator.obj object at 0x7fc1f38bb350>, 'density': 7.75, 'Mr': 51.65265211637285}
+
+Print out levels
+Fe
+{'Mr': 52, 'wtPerc': 0.9671000000000001, 'atPerc': 0.9606399973412341, 'atProp': 0.9606399973412341, 'nuclearDensity': 0.08681256841346151}
+C
+{'Mr': 12, 'wtPerc': 0.0025, 'atPerc': 0.010760969190911008, 'atProp': 0.010760969190911008, 'nuclearDensity': 0.0009724635416666663}
+Mn
+{'Mr': 55, 'wtPerc': 0.013, 'atPerc': 0.01220880868205176, 'atProp': 0.01220880868205176, 'nuclearDensity': 0.0011033040909090904}
+Si
+{'Mr': 28, 'wtPerc': 0.0027, 'atPerc': 0.004980791454078809, 'atProp': 0.004980791454078809, 'nuclearDensity': 0.0004501116964285713}
+Ni
+{'Mr': 59, 'wtPerc': 0.007, 'atPerc': 0.006128280759569659, 'atProp': 0.006128280759569659, 'nuclearDensity': 0.0005538097457627116}
+Cr
+{'Mr': 52, 'wtPerc': 0.0025, 'atPerc': 0.0024833005825179244, 'atProp': 0.0024833005825179244, 'nuclearDensity': 0.00022441466346153835}
+Mo
+{'Mr': 96, 'wtPerc': 0.0052, 'atPerc': 0.0027978519896368617, 'atProp': 0.0027978519896368617, 'nuclearDensity': 0.0002528405208333332}

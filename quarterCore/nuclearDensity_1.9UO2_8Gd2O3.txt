@@ -1,0 +1,38 @@
+
+
+|||||| DISPLAY |||||||
+
+Top level
+{'Gd2O3': <nuclearDataCalculator.obj object at 0x7f384b2a1550>, 'UO2': <nuclearDataCalculator.obj object at 0x7f384b257c70>, 'density': 10.685200000000002, 'Mr': 275.5766213143017}
+
+Print out levels
+Gd2O3
+{'density': 7.41, 'wtPerc': 0.08, 'Mr': 362.61620106005756, 'Gd': <nuclearDataCalculator.obj object at 0x7f384b0f09e0>, 'O in Gd2O3': <nuclearDataCalculator.obj object at 0x7f384b2a1750>, 'atPerc': 0.06079742063563451, 'atProp': 0.06079742063563451, 'nuclearDensity': 0.0014198363870530101}
+Gd
+{'Mr': 157.30810053002878, 'atPerc': 2, 'Gd-152': <nuclearDataCalculator.obj object at 0x7f384b2a5010>, 'Gd-154': <nuclearDataCalculator.obj object at 0x7f384b253c50>, 'Gd-155': <nuclearDataCalculator.obj object at 0x7f384b174050>, 'Gd-156': <nuclearDataCalculator.obj object at 0x7f384b2c2520>, 'Gd-157': <nuclearDataCalculator.obj object at 0x7f384b2c0c30>, 'Gd-158': <nuclearDataCalculator.obj object at 0x7f384b2cf2f0>, 'Gd-160': <nuclearDataCalculator.obj object at 0x7f384b24b350>, 'atProp': 0.12159484127126902, 'nuclearDensity': 0.0028396727741060203}
+Gd-152
+{'Mr': 152, 'wtPerc': 0.002, 'atPerc': 0.002069843428026695, 'atProp': 0.0002516822830872853, 'nuclearDensity': 5.87767802922968e-06}
+Gd-154
+{'Mr': 154, 'wtPerc': 0.0218, 'atPerc': 0.022268289555549527, 'atProp': 0.0027077091338897023, 'nuclearDensity': 6.323465557680344e-05}
+Gd-155
+{'Mr': 155, 'wtPerc': 0.148, 'atPerc': 0.15020386373189845, 'atProp': 0.018264014968811512, 'nuclearDensity': 0.0004265298224050027}
+Gd-156
+{'Mr': 156, 'wtPerc': 0.2047, 'atPerc': 0.20641646268267239, 'atProp': 0.025099177015676374, 'nuclearDensity': 0.0005861552092072561}
+Gd-157
+{'Mr': 157, 'wtPerc': 0.1565, 'atPerc': 0.15680711931814972, 'atProp': 0.019066936783695358, 'nuclearDensity': 0.000445280907513744}
+Gd-158
+{'Mr': 158, 'wtPerc': 0.2484, 'atPerc': 0.2473122289345516, 'atProp': 0.030071891221740546, 'nuclearDensity': 0.0007022858032089213}
+Gd-160
+{'Mr': 160, 'wtPerc': 0.2186, 'atPerc': 0.2149221923491518, 'atProp': 0.02613342986436826, 'nuclearDensity': 0.0006103086981650636}
+O in Gd2O3
+{'Mr': 16, 'atPerc': 3, 'atProp': 0.18239226190690352, 'nuclearDensity': 0.00425950916115903}
+UO2
+{'wtPerc': 0.92, 'density': 10.97, 'Mr': 269.94228633905817, 'U': <nuclearDataCalculator.obj object at 0x7f384b26faf0>, 'O in UO2': <nuclearDataCalculator.obj object at 0x7f384b2e0590>, 'atPerc': 0.9392025793643655, 'atProp': 0.9392025793643655, 'nuclearDensity': 0.02193372651427865}
+U
+{'Mr': 237.94228633905817, 'atPerc': 1, 'U-235': <nuclearDataCalculator.obj object at 0x7f384b237980>, 'U-238': <nuclearDataCalculator.obj object at 0x7f384b2377a0>, 'atProp': 0.9392025793643655, 'nuclearDensity': 0.02193372651427865}
+U-235
+{'Mr': 235, 'wtPerc': 0.019, 'atPerc': 0.019237886980604704, 'atProp': 0.018068273073704084, 'nuclearDensity': 0.0004219585517451855}
+U-238
+{'Mr': 238, 'wtPerc': 0.981, 'atPerc': 0.9807621130193952, 'atProp': 0.9211343062906613, 'nuclearDensity': 0.021511767962533464}
+O in UO2
+{'Mr': 16, 'atPerc': 2, 'atProp': 1.878405158728731, 'nuclearDensity': 0.0438674530285573}

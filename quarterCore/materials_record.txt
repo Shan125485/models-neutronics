@@ -1,0 +1,115 @@
+materials {
+// 2.1% enriched uranium oxide
+UOX_21 {
+      composition {
+      92235.06 5.2043958E-04; // density = 10.97 g/cm^3 for UO2   https://www.nuclear-power.com/nuclear-power-plant/nuclear-fuel/fuel-assembly/fuel-pellets/uranium-dioxide-uo2/
+      92238.06 2.3956569E-02;  
+      8016.06 4.8954017E-02;}
+}
+// 3.2% enriched uranium oxide
+UOX_32 {
+      composition {
+      92235.06	7.9303759E-04	;
+      92238.06	2.3687000E-02	;
+      8016.06	  4.8960075E-02	;
+}
+}
+
+// 4.2% enriched uranium oxide
+UOX_42 {
+      composition {
+      92235.06	1.0408461E-03	;
+      92238.06	2.3441945E-02	;
+      8016.06	  4.8954017E-02	;
+}
+}
+
+// 1.2% enriched uranium oxide with 8% Gadolinium Oxdide
+UOX_12_Gd2O3_8{ // Gd rods in 2.1% FA
+  composition {
+      92235.06 2.6650296E-04; // density = 10.97 g/cm^3 for UO2   https://www.nuclear-power.com/nuclear-power-plant/nuclear-fuel/fuel-assembly/fuel-pellets/uranium-dioxide-uo2/
+      92238.06 2.1665496E-02;  
+      8016.06 4.8123508E-02; // O in Gd2O3 + O in UO2
+      64152.06 5.8776780E-06;
+      64154.06 6.3234656E-05;
+      64155.06 4.2652982E-04;
+      64156.06 5.8615521E-04;
+      64157.06 4.4528091E-04;
+      64158.06 7.0228580E-04;
+      64160.06 6.1030870E-04;
+  
+      }
+
+}
+
+
+// 1.9% enriched uranium oxide with 8% Gadolinium Oxdide
+UOX_19_Gd2O3_8{ // Gd rods in 3.2% FA
+  composition {
+      92235.06 4.2195855E-04; // density = 10.97 g/cm^3 for UO2   https://www.nuclear-power.com/nuclear-power-plant/nuclear-fuel/fuel-assembly/fuel-pellets/uranium-dioxide-uo2/
+      92238.06 2.1511768E-02;  
+      8016.06 4.8126962E-02; // O in Gd2O3 + O in UO2
+      64152.06 5.8776780E-06;
+      64154.06 6.3234656E-05;
+      64155.06 4.2652982E-04;
+      64156.06 5.8615521E-04;
+      64157.06 4.4528091E-04;
+      64158.06 7.0228580E-04;
+      64160.06 6.1030870E-04;
+  
+      }
+
+}
+
+
+// 2.2% enriched uranium oxide with 8% Gadolinium Oxdide
+UOX_22_Gd2O3_8{ // Gd rods in 4.2% FA
+  composition {
+      92235.06 4.88581E-04; // density = 10.97 g/cm^3 for UO2   https://www.nuclear-power.com/nuclear-power-plant/nuclear-fuel/fuel-assembly/fuel-pellets/uranium-dioxide-uo2/
+      92238.06 2.14459E-02;  
+      8016.06 4.81284E-02; // O in Gd2O3 + O in UO2
+      64152.06 5.8776780E-06;
+      64154.06 6.3234656E-05;
+      64155.06 4.2652982E-04;
+      64156.06 5.8615521E-04;
+      64157.06 4.4528091E-04;
+      64158.06 7.0228580E-04;
+      64160.06 6.1030870E-04;
+  
+      }
+
+}
+
+// Helium between fuel and cladding (500C)
+He {
+      composition {
+      2004.06	1.91E-05	; 
+
+  }   
+} 
+
+// Natural zirconium alloy proportions
+Zrcladding {
+      composition {
+      40090.06	2.24E-02	;
+      40091.06	4.90E-03	;
+      40092.06	7.48E-03	;
+      40094.06	7.58E-03	;
+      40096.06	1.22E-03	;
+
+  }  
+}  
+
+
+// density ~0.7 at 300C
+hotwater {
+      moder { 1001.06 (hh2o.06); }
+      composition {
+      8016.06	2.34E-02	;
+      1001.06	4.68E-02	;
+      5010.03 1.4291E-05; // boron
+      5011.03 5.92118E-05;}
+}
+
+
+}

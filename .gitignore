@@ -8,13 +8,9 @@
 *.vtk
 *.svg
 
-# in SimpleSlab
-
-SimpleSlab/*
-! SimpleSlab/SimpleSlab_RR SimpleSlab/SimpleSlab_MC SimpleSlab/SimpleSlab_MC_mg SimpleSlab/materialsInputs/*
-
 
 *__pycache__*
+materialsInputs/
 
 # tutorials
 user_tutorials_SCONE/*

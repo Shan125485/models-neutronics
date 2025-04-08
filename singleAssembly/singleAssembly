@@ -1,0 +1,324 @@
+!!
+!! Hoogenboom-Martin PWR core with specified tallies
+!!
+type eigenPhysicsPackage;
+
+pop      50000; 
+active   200;  
+inactive 20;  
+XSdata ce; 
+dataType ce;
+
+
+// Specify output format default asciiMATLAB
+outputFormat asciiJSON;
+outputFile output;
+
+collisionOperator { neutronCE {type neutronCEstd;} }
+
+transportOperator {
+                   type transportOperatorHT;
+                   }
+
+inactiveTally {
+  shannon {
+	    type shannonEntropyClerk;
+            map {type multiMap;
+            maps (xax yax);
+            xax { type spaceMap; grid lin; min -182.07; max 182.07; N 21; axis x;}
+            yax { type spaceMap; grid lin; min -182.07; max 182.07; N 21; axis y;}
+            // zax { type spaceMap; grid lin; min -183; max 183; N 20; axis z;}
+                }
+           cycles 100; // can choose some large number which islarger than total number of cycles
+          }
+}
+
+activeTally {
+  
+  pinFiss  { type collisionClerk; response (fission); fission { type macroResponse; MT -6;} // -6 is fission rate
+                   map {type multiMap; maps (xax yax energyMap);
+                      xax {type spaceMap;  axis x;  grid lin; N 17; min -0.7; max 0.7; } //N= 289 , min -10.71; max 10.71
+                      yax {type spaceMap;  axis y;  grid lin; N 17; min -0.7; max 0.7; } //N= 289
+                      energyMap {type energyMap; grid log; min 1.0E-9; max 20.0; N 10;} // log fission rate for buckets of neutrons with different energies. Could combine with radial distance... e.g. how does fission rate vary with both energy and x-position
+                    //   zax {type spaceMap;  axis z;  grid lin; N 100; min -183; max 183; }
+
+                   }
+                 } 
+  assemblyFissRadial  { type collisionClerk; response (fission); fission { type macroResponse; MT -6;}
+                   map {type multiMap; maps (xax yax energyMap);
+                      xax {type spaceMap;  axis x;  grid lin; N 289; min -15; max 15; }
+                      yax {type spaceMap;  axis y;  grid lin; N 289; min -15; max 15; }
+                      energyMap {type energyMap; grid log; min 1.0E-9; max 20.0; N 30;}
+                   }
+                 } 
+
+  scatteringMatrices { type mgXsClerk; 
+                  energyMap {type energyMap; grid log; min 1.0E-9; max 20.0; N 10;}
+                  // //!spacemap {type multiMap; maps (xax yax );
+                  //  !   xax {type spaceMap;  axis x;  grid lin; N 289; min -15; max 15; }
+                  //   ! yax {type spaceMap;  axis y;  grid lin; N 289; min -15; max 15; }
+                  //!}
+                  PN 1;
+
+
+  }
+
+}
+
+! Uniform fission site map
+// uniformFissionSites {
+//                    type uniFissSitesField;
+//                    popVolumes 10000000;
+//                    map {type multiMap; maps (xax yax zax);
+//                       xax {type spaceMap;  axis x;  grid lin; N 17; min -182.07; max 182.07; }
+//                       yax {type spaceMap;  axis y;  grid lin; N 17; min -182.07; max 182.07; }
+//                       zax {type spaceMap;  axis y;  grid lin; N 17; min -183; max 183; }
+//                        }
+// }
+
+geometry {
+  type geometryStd;
+  boundary (2 2 2 2 2 2); 
+  graph {type shrunk;} 
+
+surfaces {
+    boundingSurface { id 80; type zSquareCylinder; origin (0 0 0) ; halfwidth (10.71 10.71 0);}
+
+//   boundingSurface { id 80; type zTruncCylinder; origin (0.0 0.0 -3.0); halfwidth 226.0; radius 249.0; }
+
+//   surf5 { id 5; type zCylinder; origin (0.0 0.0 0.0); radius 187.6;}
+//   surf6 { id 6; type zCylinder; origin (0.0 0.0 0.0); radius 209.0;}
+//   surf7 { id 7; type zCylinder; origin (0.0 0.0 0.0); radius 229.0;}
+  
+//   !lowerPlateBottom { id 31; type zPlane; z0 -229.0;}
+//   lowerNozzleBottom { id 32; type zPlane; z0 -199.0;}
+//   rodPlugBottom { id 33; type zPlane; z0 -193.0;}
+//   FAbottom { id 34; type zPlane; z0 -183.0;}
+//   centre { id 35; type zPlane; z0    0.0;}
+//   FAtop { id 36; type zPlane; z0 183.0;}
+//   upperPlenumTop { id 37; type zPlane; z0 203.0;}
+//   upperNozzleTop { id 38; type zPlane; z0 215.0;}
+//   !upperCorePlateTop { id 39; type zPlane; z0 223.0;}
+  }
+
+
+  cells { 
+//    lowercoreplate { id 103; type simpleCell; surfaces (-7 -32); filltype mat; material coreplate; }
+//    bottomnozzle { id 104; type simpleCell; surfaces (-5 32 -33); filltype mat; material nozzlebottom; } 
+//    belowFA { id 105; type simpleCell; surfaces (-5 33 -34); filltype mat; material FAbottom; } 
+//    aboveFA { id 106; type simpleCell; surfaces (-5 36 -37); filltype mat; material FAtop; } 
+//    topnozzle { id 107; type simpleCell; surfaces (-5 37 -38); filltype mat; material nozzletop; } 
+//    upperplate { id 108; type simpleCell; surfaces (-7 38); filltype mat; material reflectortop; } 
+//    downcomer { id 109; type simpleCell; surfaces (6 -7 32 -38); filltype mat; material coldwater; } 
+//    reactorvessel { id 110; type simpleCell; surfaces (7); filltype mat; material reactorvessel; } 
+//    bottomreflector { id 111; type simpleCell; surfaces (5 -6 32 -34); filltype mat; material reflectorbottom; } 
+//    topreflector { id 112; type simpleCell; surfaces (5 -6 36 -38); filltype mat; material reflectortop; }
+ 
+//    corelower { id 210; type simpleCell; surfaces (-6 34 -35); filltype uni; universe 10; }
+//    coreupper { id 220; type simpleCell; surfaces (-6 35 -36); filltype uni; universe 20; }
+  }
+
+
+
+universes {
+    root { id 1000; type rootUniverse; border 80; fill u<8>; }
+    // uni_cellcore  { id 100; type cellUniverse; cells (103 104 105 106 107 108 109 110 111 112 210 220); }
+    
+   //Pin universes  
+    //  UO2bottom { id 1; type pinUniverse; radii ( 0.41 0.475 0.0 ); fills (UOXfuel  Zrcladding coldwater);} 
+    //  GTbottom { id 2; type pinUniverse; radii (0.56 0.62 0.0 ); fills (coldwater  Zrcladding coldwater);}
+     UO2Tube { id 3; type pinUniverse; radii ( 0.41 0.475 0.0 ); fills (UOXfuel  Zrcladding hotwater);} 
+     guideTube { id 4; type pinUniverse; radii (0.56 0.62 0.0 ); fills (hotwater  Zrcladding hotwater);}
+     GdTube { id 5; type pinUniverse; radii ( 0.475 0.0 ); fills (  Gd hotwater);}
+
+    //  bottomReflPin { id 5; type pinUniverse; radii (0.0 ); fills (reflectorbottom);} 
+    //  topReflPin { id 7; type pinUniverse; radii (0.0 ); fills (reflectortop);}   
+    
+   
+   
+      
+    //  Fuel Assembly Lattice (Upper half)
+    Assembly24Gd {
+      id 8;
+      type latUniverse;
+      origin (0.0 0.0 0.0);
+      pitch (1.26 1.26 0.0);
+      shape (17 17 0);
+      padMat hotwater;  
+      map (
+      3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+      3 3 3 3 3 5 3 3 3 3 3 5 3 3 3 3 3
+      3 3 5 3 3 4 3 3 4 3 3 4 3 3 5 3 3
+      3 3 3 4 3 3 3 3 5 3 3 3 3 4 3 3 3
+      3 3 3 3 5 3 3 3 3 3 3 3 5 3 3 3 3
+      3 5 4 3 3 4 3 3 4 3 3 4 3 3 4 5 3
+      3 3 3 3 3 3 5 3 3 3 5 3 3 3 3 3 3
+      3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+      3 3 4 5 3 4 3 3 3 3 3 4 3 5 4 3 3
+      3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+      3 3 3 3 3 3 5 3 3 3 5 3 3 3 3 3 3
+      3 5 4 3 3 4 3 3 4 3 3 4 3 3 4 5 3
+      3 3 3 3 5 3 3 3 3 3 3 3 5 3 3 3 3
+      3 3 3 4 3 3 3 3 5 3 3 3 3 4 3 3 3
+      3 3 5 3 3 4 3 3 4 3 3 4 3 3 5 3 3
+      3 3 3 3 3 5 3 3 3 3 3 5 3 3 3 3 3
+      3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 ); }      
+     
+   
+     //  Core Lattice (Lower Half)
+     
+      
+        
+  }
+
+
+}
+
+
+viz {
+
+  bmpz {
+    type bmp;
+    output radial;
+    what material;
+    centre (0.0 0.0 0.0);
+    axis z;
+    res (1000 1000);
+  }
+  
+  bmpx {
+    type bmp;
+    output axial;
+    what material;
+    centre (0.0 0.0 0.0);
+    width (20.0 20.0);
+    axis x;
+    res (1000 1000);
+  }
+  
+      assembly {
+    type bmp;
+    output assembly;
+    what material;
+    centre (0 0 0.0);
+    width (21.42 21.42);
+    axis z;
+    res (1000 1000);
+  }
+  
+
+}
+
+
+
+nuclearData {
+  handles {
+    ce {type aceNeutronDatabase; aceLibrary $SCONE_ACE;}
+  }
+
+materials {
+    
+ 
+// UOXfuel {
+//       composition {
+//       92234.03 4.9476e-6;
+//       92235.03 4.8218e-4;
+//       92236.03 9.0402e-5;
+//       92238.03 2.1504e-2;
+//       93237.03 7.3733e-6;
+//       94238.03 1.5148e-6;
+//       94239.03 1.3955e-4;
+//       94240.03 3.4405e-5;
+//       94241.03 2.1439e-5;
+//       94242.03 3.7422e-6;
+//       95241.03 4.5041e-7;
+//       95242.03 9.2301e-9;
+//       95243.03 4.7878e-7;
+//       96242.03 1.0485e-7;
+//       96243.03 1.4268e-9;
+//       96244.03 8.8756e-8;
+//       96245.03 3.5285e-9;
+//       42095.03 2.6497e-5;
+//       43099.03 3.2772e-5;
+//       44101.03 3.0742e-5;
+//       44103.03 2.3505e-6;
+//       47109.03 2.0009e-6;
+//       54135.03 1.0801e-8;
+//       55133.03 3.4612e-5;
+//       60143.03 2.6078e-5;
+//       60145.03 1.9898e-5;
+//       62147.03 1.6128e-6;
+//       62149.03 1.1627e-7;
+//       62150.03 7.1727e-6;
+//       62151.03 5.4947e-7;
+//       62152.03 3.0221e-6;
+//       63153.03 2.6209e-6;
+//       64155.03 1.5369e-9;
+//       8016.03 4.5737e-2;}
+// }
+// Zrcladding {
+//       composition {
+//       40090.03 0.019578;
+//       40091.03 0.0042689;
+//       40092.03 0.00652638;
+//       40094.03 0.00661301;
+//       40096.03 0.00106413;}
+//   }    
+
+// L x density / Mr * 1 barn 
+UOXfuel {
+      composition {
+      92235.03 0.00052; // density = 10.97 g/cm^3 for UO2   https://www.nuclear-power.com/nuclear-power-plant/nuclear-fuel/fuel-assembly/fuel-pellets/uranium-dioxide-uo2/
+      92238.03 0.02548;  // 2 % enrichment
+      8016.03 0.052;}
+}
+
+// Zrcladding {
+//       composition {
+//       40091.03 0.0429552; // density = 6.49 g/cm^32 Atomic mass = 91  https://www.lenntech.com/periodic/elements/zr.htm
+
+//   }    
+
+Zrcladding {
+      composition {
+      40091.03 0.0429552; // density = 6.49 g/cm^32 Atomic mass = 91  https://www.lenntech.com/periodic/elements/zr.htm
+
+  }  
+}  
+
+Gd {
+  composition {
+    64148.03  0.0303068; // density = 7.9 g/cm^3, atomic mass = 157    https://www.lenntech.com/periodic/elements/gd.htm
+
+    }
+  }
+  
+// coldwater {
+//       moder { 1001.03 (hh2o.00); }
+//       composition {
+//       1001.03 0.04938;
+//       8016.03 0.02469;
+//       5010.03 1.60238E-05;
+//       5011.03 6.63914E-05;}
+// }
+
+   
+
+hotwater {
+      moder { 1001.03 (hh2o.00); }
+      composition {
+      1001.03 0.04404;
+      8016.03 0.02202;
+      5010.03 1.4291E-05;
+      5011.03 5.92118E-05;}
+}
+
+
+
+
+      
+ 
+
+
+}
+}

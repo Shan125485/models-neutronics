@@ -1,0 +1,225 @@
+!!
+!! A 2D slice of the BEAVRS benchmark
+!!
+!! Use ENDF/B-VII.1 library for consistency with Boyd thesis
+!! A 3.1% enriched fuel assembly with no burnable poisons
+type eigenPhysicsPackage;
+
+pop      100000;
+inactive 100;
+active   900;
+XSdata ce;
+dataType ce;
+
+// Specify output format default asciiMATLAB
+outputFormat asciiJSON;
+outputFile FuelAssembly_MC_output;
+
+collisionOperator { neutronCE {type neutronCEstd;}}
+
+transportOperator { 
+                    type transportOperatorHT; cache 1;
+                  }
+
+inactiveTally {
+  shannon {
+	    type shannonEntropyClerk;
+            map {type multiMap;
+            maps (xax yax);
+            xax { type spaceMap; grid lin; min -10.71; max 10.71; N 17; axis x;}
+            yax { type spaceMap; grid lin; min -10.71; max 10.71; N 17; axis y;}
+                }
+           cycles 500;
+          }
+}
+
+activeTally {
+  pinFiss  { type collisionClerk; response (flux fission); flux {type fluxResponse;} fission { type macroResponse; MT -6;}
+                 map {type multiMap; maps (xax yax);
+                      xax {type spaceMap;  axis x;  grid lin; N 17; min -10.71; max 10.71; }
+                      yax {type spaceMap;  axis y;  grid lin; N 17; min -10.71; max 10.71; }
+                     }
+                  }
+
+
+}
+
+geometry {
+  type geometryStd;
+  boundary ( 1 1 1 1 1 1);
+  graph {type shrunk;}
+
+  surfaces { 
+    boundingSurface { id 1; type zSquareCylinder; origin (0 0 0) ; halfwidth (10.71 10.71 0);} 
+    
+   
+  }
+
+  cells {
+  }
+
+  universes {
+    root { id 1; type rootUniverse; border 1; fill u<1431>; }
+
+    // Pin universes
+    
+    //GT
+    pin41 { id 12; type pinUniverse; radii (0.56134 0.60198 0.0 );
+                                     fills (Water Zircaloy Water);}
+    
+    //INST Tube
+    pin51 { id 14; type pinUniverse; radii (0.43688 0.48387 .56134 0.60198 0.0 );
+                                     fills (Air Zircaloy Water Zircaloy Water);}
+
+    // pins
+
+    pin31 { id 31; type pinUniverse; radii (0.39218 0.40005 0.45720 0.0);
+                                     fills (UO2-31 Helium Zircaloy Water);}
+
+
+    
+    A14E31 {
+      id 1431;
+      type latUniverse;
+      origin (0.0 0.0 0.0);
+      pitch (1.26 1.26 0.0);
+      shape (17 17 0);
+      padMat Water;
+      map (
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 12 31 31 12 31 31 12 31 31 31 31 31 
+        31 31 31 12 31 31 31 31 31 31 31 31 31 12 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 12 31 31 12 31 31 12 31 31 12 31 31 12 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31
+        31 31 12 31 31 12 31 31 14 31 31 12 31 31 12 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 12 31 31 12 31 31 12 31 31 12 31 31 12 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 12 31 31 31 31 31 31 31 31 31 12 31 31 31
+        31 31 31 31 31 12 31 31 12 31 31 12 31 31 31 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 ); }
+ 
+  }
+}
+
+
+viz {
+  bmp {
+    type bmp;
+    output fuelassemblyMaterials_MC;
+    what material;
+    centre (0.0 0.0 0.0);
+    //width (25.0 25.0);
+    axis z;
+    res (2000 2000);
+  }
+}
+
+
+nuclearData {
+  handles {
+    ce {type aceNeutronDatabase; aceLibrary $SCONE_ACE; ures 0;}
+    // ce {type aceNeutronDatabase; aceLibrary $ENDFB7; ures 0;}
+  }
+  materials {
+
+  ! Note that temperatures should be modified.
+  ! Reactor is isothermal and coolant temperature should be 566K.
+  ! This data is not directly available and we do not yet use
+  ! stochastic mixing or OTF Doppler.
+  ! Some libraries may not contain all isotopes present here.
+  ! These are commented out.
+
+    Air {
+      temp 600; // Boyd thesis p161 //566; original
+      composition {
+      18036.06 7.9414e-10; // Boyd thesis Table B.1  //7.8730E-09;
+      18038.06 1.4915e-10; // Boyd thesis Table B.1  //1.4844E-09;
+      18040.06 2.3506e-7;  // Boyd thesis Table B.1  //2.3506E-06;
+      6012.06  6.7565e-09;// Boyd thesis Table B.1  //6.7539E-08; original
+      //6013.06  7.5658E-10;
+      7014.06  1.9681E-05; // Boyd thesis Table B.1  // 1.9680E-04; original
+      7015.06  7.1900E-08; // Boyd thesis Table B.1  // 7.2354E-07; original
+      8016.06  5.2864E-06; // Boyd thesis Table B.1  // 5.2866E-05; original
+      8017.06  2.0137E-09; // Boyd thesis Table B.1  // 2.0084E-08; original
+      //8018.06  1.0601E-07; original
+      }
+      }
+
+    Helium {
+      temp 600; // Boyd thesis p161 //566;
+      composition {
+      // 2003.06 4.8089E-10; // None in Boyd thesis Table B.6
+      2004.06 2.4044E-04; }
+      }
+
+
+    Water {
+      temp 600; // Boyd thesis p161 //566;
+      moder {1001.06 lwj3.11; }
+      composition {
+      5010.06 8.0042e-6; // Boyd thesis Table B.1 //7.9714E-06; original
+      5011.06 3.2218e-5; // Boyd thesis Table B.1 //3.2247E-05;  original
+      1001.06 4.9457e-2; // Boyd thesis Table B.1 //4.9456E-02; original
+      1002.06 7.4196e-6; // Boyd thesis Table B.1 //7.7035E-06;original
+      8016.06 2.4672e-2; // Boyd thesis Table B.1 //2.4673E-02;original
+      8017.06 9.3982e-6; // Boyd thesis Table B.1 //9.3734E-06;original
+      //8018.06 4.9474E-05; original
+      }
+      }
+
+    Zircaloy {
+      temp 600; // Boyd thesis p161 //566;
+      composition {
+      24050.06 3.2962E-06;
+      24052.06 6.3564E-05;
+      24053.06 7.2076E-06;
+      24054.06 1.7941E-06;
+      26054.06 8.6699e-06; // Boyd thesis Table B.8 //8.6698E-06;
+      26056.06 1.3610E-04;
+      26057.06 3.1431E-06;
+      26058.06 4.1829E-07;
+      8016.06  3.0743e-04; // Boyd thesis Table B.8 // 3.0744E-04;
+      8017.06  1.1711e-07; // Boyd thesis Table B.8 //1.1680E-07;
+      //8018.06  6.1648E-07;
+      50112.06 4.6735E-06;
+      50114.06 3.1799E-06;
+      50115.06 1.6381E-06;
+      50116.06 7.0055E-05;
+      50117.06 3.7003E-05;
+      50118.06 1.1669E-04;
+      50119.06 4.1387E-05;
+      50120.06 1.5697E-04;
+      50122.06 2.2308E-05;
+      50124.06 2.7897E-05;
+      40090.06 2.1828E-02;
+      40091.06 4.7600e-03; // Boyd thesis Table B.8 //4.7601E-03;
+      40092.06 7.2758e-03; // Boyd thesis Table B.8 //7.2759E-03;
+      40094.06 7.3734E-03;
+      40096.06 1.1879E-03; }
+      }
+
+   
+
+    UO2-31 {
+      temp 600; // Boyd thesis p161 //566;
+      composition {
+      //8016.06   4.5853E-02; // original value
+      //8017.06   1.7420E-05; // original value
+      8016.06   4.5850E-02; // Copied from Boyd Thesis Table B.5
+      8017.06   1.7466E-05; // Copied from Boyd Thesis Table B.5
+      92234.06  5.7987E-06;
+      92235.06  7.2175E-04;
+      92238.06  2.2253E-02;}
+       }
+
+   
+
+
+}
+}

@@ -5,9 +5,9 @@
 !! A 3.1% enriched fuel assembly with no burnable poisons
 type eigenPhysicsPackage;
 
-pop      100000;
+pop      10000;
 inactive 500;
-active   10000;
+active   5000;
 XSdata ce;
 dataType ce;
 
@@ -41,18 +41,19 @@ activeTally {
                      }
                   }
   u238Capture  { type collisionClerk; response (capture); capture { type microResponse; MT 102; material u238; }
-                 map {type multiMap; maps (xax yax);
+                 map {type multiMap; maps (xax yax materialMap);
                       xax {type spaceMap;  axis x;  grid lin; N 17; min -10.71; max 10.71; }
                       yax {type spaceMap;  axis y;  grid lin; N 17; min -10.71; max 10.71; }
+
+                      materialMap
+                      {
+                        type materialMap;
+                        materials (UO2-31 Air);
+                      }
                      }
                   }
 
-  hydrogenScatter  { type collisionClerk; response (scatter); scatter { type microResponse; MT 2; material hydrogen; }
-                 map {type multiMap; maps (xax yax);
-                      xax {type spaceMap;  axis x;  grid lin; N 17; min -10.71; max 10.71; }
-                      yax {type spaceMap;  axis y;  grid lin; N 17; min -10.71; max 10.71; }
-                     }
-                  }
+  
                   fluxSpectrum
                   {
                     type collisionClerk;
@@ -146,9 +147,9 @@ geometry {
   }
 
   universes {
-    // root { id 1; type rootUniverse; border 1; fill u<1431>; } // 3.1% enriched assembly without BPs
+    root { id 1; type rootUniverse; border 1; fill u<1431>; } // 3.1% enriched assembly without BPs
     // root { id 1; type rootUniverse; border 1; fill u<1416>; } // 1.6% enriched assembly without BPs
-    root { id 1; type rootUniverse; border 1; fill u<2031>; } // 3.1% enriched assembly with 20 BPs
+    // root { id 1; type rootUniverse; border 1; fill u<2031>; } // 3.1% enriched assembly with 20 BPs
 
     // Pin universes
     //BP 

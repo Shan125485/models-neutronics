@@ -1,0 +1,274 @@
+!!
+!! fuel assembly
+!!
+type randomRayPhysicsPackage;  // try tro specify the initial source / play with entropy 
+
+pop      2000; //1750
+active   500; // 500 //1700 
+inactive 300; // 500
+dead     20;  
+termination 220;  
+plot 0;
+cache 1;
+printFlux 1;
+XSdata   mg; 
+dataType mg;
+outputFormat asciiJSON;
+// outputFile SimplePin_RR_output;
+outputFile SimplePin_RR_output;
+
+seed  -29501819;
+rho 1; //stabilisation of negative cross sections for deterministic methods
+
+
+// fissionRate needs a fission map
+
+fissionMap {
+   type radialMap; axis z; origin (0.0 0.0 0.0); grid unstruct; bins (0.2375    0.335875721    0.411362067  0.475  0.573775871   0.657884868      0.732397604);
+
+  // type multiMap;
+  // maps(xax yax);
+
+  // xax
+  // {
+  //   type spaceMap;
+  //   axis x;
+  //   grid lin;
+  //   min - 0.63;
+  //   max 0.63;
+  //   N 10;}
+  //           yax { type spaceMap; axis y; grid lin; min -0.63; max 0.63; N 10;}
+}
+fluxMap {
+  // type radialMap; axis z; origin (0.0 0.0 0.0); grid unstruct; bins (0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.475 0.5 0.55 0.6 0.63); 
+  type multiMap;
+
+            maps (xax yax);
+            xax { type spaceMap; axis x; grid lin; min -0.63; max 0.63; N 100;}
+            yax { type spaceMap; axis y; grid lin; min -0.63; max 0.63; N 100;}
+}
+             
+geometry {
+  type geometryStd;
+  boundary ( 1 1 1 1 1 1);
+  graph {type extended;}
+
+  surfaces { 
+    boundingSurface { id 1; type zSquareCylinder; origin (0 0 0) ; halfwidth (10.71 10.71 0);} 
+    
+   
+  }
+
+  cells {
+  }
+
+
+universes {
+
+
+  // root { id 1; type rootUniverse; border 1; fill u<1431>; } // 3.1% enriched assembly without BPs
+  // root { id 1; type rootUniverse; border 1; fill u<1416>; } // 1.6% enriched assembly without BPs
+  root { id 1; type rootUniverse; border 1; fill u<2031>; } // 3.1% enriched assembly with 20 BPs
+
+  // Pin universes
+  //BP 
+  pin10 { id 10; type azimPinUniverse; naz 8;
+    radii (0.21400 0.23051 0.24130 0.42672 0.43688 0.48387 0.56134 0.60198 0.0);
+    fills (Air SS304 Helium BorosilicateGlass Helium SS304 Water Zircaloy Water);}
+
+  //Guide tube
+  pin41 { id 12; type azimPinUniverse; naz 8; 
+    radii (0.16925 .23926 0.29315  0.33850 0.37846 0.41458 0.44779 0.47871  0.50775 0.53522 0.56134 0.60198 0.71170  0.80552 0.89 0.0 );
+    fills (Water Water Water Water Water Water Water  Water Water Water Water Zircaloy Water Water Water Water);}
+  
+  //INST Tube
+  pin51 { id 14; type azimPinUniverse; naz 8;
+    radii (0.43688 0.48387 .56134 0.60198 0.0 );
+    fills (Air Zircaloy Water Zircaloy Water);}
+
+  // fuel pins
+
+  pin16 { id 16; type azimPinUniverse; naz 8;
+    radii ( 0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16 UO2-16 UO2-16 UO2-16 UO2-16 Helium Zircaloy Water Water Water Water Water Water);}
+
+  pin31 { id 31; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31 UO2-31 UO2-31 UO2-31 UO2-31  Helium Zircaloy Water Water Water Water Water Water);}
+
+  
+  A14E31 { // 3.1% enriched assembly without BPs
+      id 1431;
+      type latUniverse;
+      origin (0.0 0.0 0.0);
+      pitch (1.26 1.26 0.0);
+      shape (17 17 0);
+      padMat Water;
+      map (
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 12 31 31 12 31 31 12 31 31 31 31 31 
+        31 31 31 12 31 31 31 31 31 31 31 31 31 12 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 12 31 31 12 31 31 12 31 31 12 31 31 12 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31
+        31 31 12 31 31 12 31 31 14 31 31 12 31 31 12 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 12 31 31 12 31 31 12 31 31 12 31 31 12 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 12 31 31 31 31 31 31 31 31 31 12 31 31 31
+        31 31 31 31 31 12 31 31 12 31 31 12 31 31 31 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 ); }
+
+
+      A14E16 { // 1.6 enriched assemnly (no BPs)
+      id 1416;
+      type latUniverse;
+      origin (0.0 0.0 0.0);
+      pitch (1.26 1.26 0.0);
+      shape (17 17 0);
+      padMat Water;
+      map (
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 16 16 16 12 16 16 12 16 16 12 16 16 16 16 16 
+        16 16 16 12 16 16 16 16 16 16 16 16 16 12 16 16 16 
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 12 16 16 12 16 16 12 16 16 12 16 16 12 16 16 
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 12 16 16 12 16 16 14 16 16 12 16 16 12 16 16
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 12 16 16 12 16 16 12 16 16 12 16 16 12 16 16
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 16 12 16 16 16 16 16 16 16 16 16 12 16 16 16
+        16 16 16 16 16 12 16 16 12 16 16 12 16 16 16 16 16
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16); }
+
+
+    
+
+     A20E31 { // 3.1% enriched assembly with 20 BPs
+      id 2031;
+      type latUniverse;
+      origin (0.0 0.0 0.0);
+      pitch (1.26 1.26 0.0);
+      shape (17 17 0);
+      padMat Water;
+      map (
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 10 31 31 10 31 31 10 31 31 31 31 31 
+        31 31 31 10 31 31 31 31 31 31 31 31 31 10 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 10 31 31 10 31 31 12 31 31 10 31 31 10 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31
+        31 31 10 31 31 12 31 31 14 31 31 12 31 31 10 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 10 31 31 10 31 31 12 31 31 10 31 31 10 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 10 31 31 31 31 31 31 31 31 31 10 31 31 31
+        31 31 31 31 31 10 31 31 10 31 31 10 31 31 31 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 ); }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  }
+}
+
+
+viz {
+  myVTK {
+    type vtk;
+    what uniqueID; 
+    corner (-10.71 -10.71 0);
+    width (21.42 21.42 0);
+    vox (500 500 1);
+  }
+  bmpID { 
+    type bmp;
+    output FuelAssembly_RR_id;
+    what uniqueID; 
+    centre (0.0 0.0 0); 
+    axis z; 
+    res (500 500);  }
+
+  bmpMat { 
+    type bmp; 
+    output FuelAssembly_RR_mat; 
+    what material; 
+    centre (0.0 0.0 0); 
+    axis z; 
+    res (2000 2000);  }
+} 
+
+
+nuclearData {
+  handles {
+    mg {type baseMgNeutronDatabase; PN P0;}
+  }
+
+materials {
+
+
+//mix of uranium and water
+Air { 
+      temp 0;
+      composition {}
+      xsFile materialsInputs/Air ;   }
+
+SS304 { 
+      temp 0;
+      composition {}
+      xsFile materialsInputs/SS304;  }
+
+Helium
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/Helium;  }
+
+BorosilicateGlass
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/BorosilicateGlass;  }
+
+Zircaloy
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/Zircaloy;  }
+
+Water
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/Water;  }
+
+UO2-16
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16;  }
+
+UO2-31
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31;  }
+
+
+}
+
+  
+}
+

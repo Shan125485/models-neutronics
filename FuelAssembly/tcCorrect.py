@@ -7,7 +7,7 @@ from viz_neutronics.transport_correction import generate_mg_XS
 # MC_output_file = "SimplePin_MC_output.json"
 # resultsFile= 'Results/'
 
-filepathMC = 'FuelAssembly_MC_output_ref_31.json'
+filepathMC = 'FuelAssembly_MC_output.json'
 
 
 

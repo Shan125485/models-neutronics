@@ -1,0 +1,1690 @@
+!!
+!! fuel assembly
+!!
+type randomRayPhysicsPackage;  // try tro specify the initial source / play with entropy 
+
+pop      10000; // need 10000 rays minimum for a fuel assembly
+active   150; // 500 //1700 
+inactive 150; // 500
+dead     20;  
+termination 220;  
+plot 0;
+cache 1;
+printFlux 1;
+XSdata   mg; 
+dataType mg;
+outputFormat asciiJSON;
+outputFile QuarterAssembly_RR_output;
+
+seed  -29501819;
+rho 1; //stabilisation of negative cross sections for deterministic methods
+
+
+// fissionRate needs a fission map
+
+fissionMap {
+
+  type multiMap;
+  maps (xax yax);
+
+  xax {type spaceMap;  axis x;  grid lin; min -5.67; max 5.67; N 9; }
+  yax {type spaceMap;  axis y;  grid lin;min -5.67; max 5.67; N 9; }
+    
+}
+fluxMap {
+  // type radialMap; axis z; origin (0.0 0.0 0.0); grid unstruct; bins (0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.475 0.5 0.55 0.6 0.63); 
+ 
+    type energyMap; grid unstruct; 
+    // CASMO2
+    bins (0 6.25e-7 20);
+    // CASMO4
+    // bins (0 6.25e-7 5.53e-3 8.21e-1 20);
+    // CASMO7
+    // bins (0  5.8e-8  1.4e-7  6.25e-7 4e-6  5.53e-3 8.21e-1 20);
+    // CASMO8
+    // bins (0  5.8e-8  1.4e-7  2.8e-7  6.25e-7 4e-6  5.53e-3 8.21e-1 20);
+    // CASMO16
+    // bins (0 3e-8 5.8e-8 1.4e-7 2.8e-7 3.5e-7 6.25e-7 8.5e-7 9.72e-7 1.02e-6 1.097e-6 1.15e-6 1.3e-6 4e-6 5.53e-3 8.21e-1 20);
+    // CASMO25
+    //  bins  (0 3e-8 5.8e-8  1.4e-7  2.8e-7  3.5e-7  6.25e-7 9.72e-7 1.02e-6 1.097e-6  1.15e-6 1.855e-6  4e-6  9.877e-6  1.5968e-5 1.48728e-4  5.53e-3 9.118e-3  1.11e-1 5e-1  8.21e-1 1.353 2.231 3.679 6.0655  20);
+    // CASMO40
+    // bins (0 1.5e-8 3e-8 4.2e-8 5.8e-8  8e-8 1e-7 1.4e-7 1.8e-7 2.2e-7 2.8e-7 3.5e-7 6.25e-7 8.5e-7 9.5e-7 9.72e-7 1.02e-6 1.097e-6 1.15e-6  1.3e-6 1.5e-6 1.855e-6 2.1e-6  2.6e-6 3.3e-6 4e-6 9.877e-6 1.5968e-5 2.77e-5 4.8052e-5 1.48728e-4 5.53e-3 9.118e-3 1.11e-1 5e-1 8.21e-1 1.353 2.231 3.679 6.0655 20);
+    // CASMO70
+    // bins (0  5e-9 1e-8 1.5e-8 2e-8 2.5e-8 3e-8  3.5e-8 4.2e-8 5e-8 5.8e-8  6.7e-8 8e-8 1e-7 1.4e-7 1.8e-7 2.2e-7 2.5e-7 2.8e-7  3e-7 3.2e-7 3.5e-7 4e-7 5e-7 6.25e-7 7.8e-7 8.5e-7 9.1e-7 9.5e-7 9.72e-7 9.96e-7 1.02e-6 1.045e-6 1.071e-6 1.097e-6 1.123e-6 1.15e-6 1.3e-6 1.5e-6 1.855e-6 2.1e-6 2.6e-6 3.3e-6 4e-6 9.877e-6 1.5968e-5 2.77e-5 4.8052e-5 7.55014e-5 1.48728e-4 3.67262e-4 9.06898e-4 1.4251e-3 2.23945e-3  3.519e-3 5.53e-3 9.118e-3 1.503e-2 2.478e-2 4.085e-2 6.743e-2 1.11e-1 1.83e-1 3.025e-1 5e-1 8.21e-1 1.353 2.231 3.679 6.0655 20);
+
+  }
+  // in MeV
+
+             
+geometry {
+  type geometryStd;
+  boundary ( 1 1 1 1 1 1);
+  graph {type extended;}
+
+  surfaces { 
+    boundingSurface { id 1; type zSquareCylinder; origin (0.315 0.315 0) ; halfwidth ( 5.355 5.355 0 );}
+    
+   
+  }
+
+  cells {
+  }
+
+
+universes {
+
+  // root { id 1; type rootUniverse; border 1; fill u<1416>; } // 1.6% enriched assembly without BPs
+  // root { id 1; type rootUniverse; border 1; fill u<1431>; } // 3.1% enriched assembly without BPs
+  root { id 1; type rootUniverse; border 1; fill u<2031>; } // 3.1% enriched assembly with 20 BPs
+
+  // Pin universes
+  //Burnable poison
+  pin10 { id 10; type azimPinUniverse; naz 8;
+    // radii (0.21400 0.23051 0.24130 0.42672 0.43688 0.48387 0.56134 0.60198 0.0); // MC
+    // fills (Air SS304 Helium BorosilicateGlass Helium SS304 Water Zircaloy Water);} // MC
+
+    radii (0.09570 0.13535 0.16576 0.19141 0.21400 0.23051 0.24130 0.28809 0.32829 0.36407 0.39663 0.42672 0.43688 0.48387 0.51100 0.53676 0.56134 0.60198 0.68543 0.75976 0.82745  0.89 0.0);
+    fills (Air Air Air Air Air SS304 Helium BorosilicateGlass BorosilicateGlass BorosilicateGlass BorosilicateGlass BorosilicateGlass Helium SS304 Water Water Water Zircaloy Water Water Water Water Water);
+}
+
+  //Guide tube
+  pin41 { id 12; type azimPinUniverse; naz 8; 
+    radii ( 0.17751  0.25104 0.30746  0.35502 0.39693 0.43481 0.469650 0.50208 0.53253 0.56134 0.60198 0.68543 0.75976 0.82745 0.89 0.0 );
+    fills (Water Water Water Water Water Water Water  Water Water Water Zircaloy Water Water Water Water Water);}
+  
+  //INST Tu
+  pin51 { id 14; type azimPinUniverse; naz 8;
+   // radii (0.43688 0.48387 .56134 0.60198 0.0 );
+   // fills (Air Zircaloy Water Zircaloy Water);}
+ radii ( 0.13815  0.19538 0.23929 0.27631 0.30892 0.33841 0.36552 0.39076 0.41446  0.43688 0.48387 0.51100 0.5368 .561340  0.60198 .68543 0.75976 0.82745 0.89 0.0  );
+  fills (Air Air Air Air Air Air Air Air Air Air Zircaloy  Water Water Water Zircaloy Water Water Water Water Water);}
+
+
+  // fuel pins
+
+// 1.6% enriched fuel
+
+// degenerate homogenisation
+
+
+   pin161 { id 161; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_1 UO2-16_1 UO2-16_1 UO2-16_1 UO2-16_1  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin162 { id 162; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_2 UO2-16_2 UO2-16_2 UO2-16_2 UO2-16_2  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin163 { id 163; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_3 UO2-16_3 UO2-16_3 UO2-16_3 UO2-16_3  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin164 { id 164; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_4 UO2-16_4 UO2-16_4 UO2-16_4 UO2-16_4 Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin165 { id 165; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_5 UO2-16_5 UO2-16_5 UO2-16_5 UO2-16_5  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin166 { id 166; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_6 UO2-16_6 UO2-16_6 UO2-16_6 UO2-16_6  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin167 { id 167; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_7 UO2-16_7 UO2-16_7 UO2-16_7 UO2-16_7  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin168 { id 168; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_8 UO2-16_8 UO2-16_8 UO2-16_8 UO2-16_8  Helium Zircaloy Water Water Water Water Water Water);}
+  
+     pin169 { id 169; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_9 UO2-16_9 UO2-16_9 UO2-16_9 UO2-16_9  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1610 { id 1610; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_10 UO2-16_10 UO2-16_10 UO2-16_10 UO2-16_10  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin1611 { id 1611; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_11 UO2-16_11 UO2-16_11 UO2-16_11 UO2-16_11  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1612 { id 1612; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_12 UO2-16_12 UO2-16_12 UO2-16_12 UO2-16_12  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin1613 { id 1613; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_13 UO2-16_13 UO2-16_13 UO2-16_13 UO2-16_13  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1614 { id 1614; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_14 UO2-16_14 UO2-16_14 UO2-16_14 UO2-16_14  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin1615 { id 1615; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_15 UO2-16_15 UO2-16_15 UO2-16_15 UO2-16_15  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1616 { id 1616; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_16 UO2-16_16 UO2-16_16 UO2-16_16 UO2-16_16  Helium Zircaloy Water Water Water Water Water Water);}
+
+pin1617 { id 1617; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_17 UO2-16_17 UO2-16_17 UO2-16_17 UO2-16_17  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1618 { id 1618; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_18 UO2-16_18 UO2-16_18 UO2-16_18 UO2-16_18  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin1619 { id 1619; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_19 UO2-16_19 UO2-16_19 UO2-16_19 UO2-16_19  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1620 { id 1620; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_20 UO2-16_20 UO2-16_20 UO2-16_20 UO2-16_20  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin1621 { id 1621; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_21 UO2-16_21 UO2-16_21 UO2-16_21 UO2-16_21  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1622 { id 1622; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_22 UO2-16_22 UO2-16_22 UO2-16_22 UO2-16_22  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin1623 { id 1623; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_23 UO2-16_23 UO2-16_23 UO2-16_23 UO2-16_23  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1624 { id 1624; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_24 UO2-16_24 UO2-16_24 UO2-16_24 UO2-16_24  Helium Zircaloy Water Water Water Water Water Water);}
+  
+     pin1625 { id 1625; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_25 UO2-16_25 UO2-16_25 UO2-16_25 UO2-16_25  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1626 { id 1626; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_26 UO2-16_26 UO2-16_26 UO2-16_26 UO2-16_26  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin1627 { id 1627; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_27 UO2-16_27 UO2-16_27 UO2-16_27 UO2-16_27  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1628 { id 1628; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_28 UO2-16_28 UO2-16_28 UO2-16_28 UO2-16_28  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin1629 { id 1629; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_29 UO2-16_29 UO2-16_29 UO2-16_29 UO2-16_29  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1630 { id 1630; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_30 UO2-16_30 UO2-16_30 UO2-16_30 UO2-16_30  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin1631 { id 1631; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_31 UO2-16_31 UO2-16_31 UO2-16_31 UO2-16_31  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1632 { id 1632; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_32 UO2-16_32 UO2-16_32 UO2-16_32 UO2-16_32  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+
+pin1633 { id 1633; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_33 UO2-16_33 UO2-16_33 UO2-16_33 UO2-16_33  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1634 { id 1634; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_34 UO2-16_34 UO2-16_34 UO2-16_34 UO2-16_34  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin1635 { id 1635; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_35 UO2-16_35 UO2-16_35 UO2-16_35 UO2-16_35  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1636 { id 1636; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_36 UO2-16_36 UO2-16_36 UO2-16_36 UO2-16_36 Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin1637 { id 1637; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_37 UO2-16_37 UO2-16_37 UO2-16_37 UO2-16_37  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1638 { id 1638; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_38 UO2-16_38 UO2-16_38 UO2-16_38 UO2-16_38  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin1639 { id 1639; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_39 UO2-16_39 UO2-16_39 UO2-16_39 UO2-16_39  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1640 { id 1640; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_40 UO2-16_40 UO2-16_40 UO2-16_40 UO2-16_40  Helium Zircaloy Water Water Water Water Water Water);}
+  
+     pin1641 { id 1641; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_41 UO2-16_41 UO2-16_41 UO2-16_41 UO2-16_41  Helium Zircaloy Water Water Water Water Water Water);}
+  
+
+   pin1642 { id 1642; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_42 UO2-16_42 UO2-16_42 UO2-16_42 UO2-16_42  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1643 { id 1643; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_43 UO2-16_43 UO2-16_43 UO2-16_43 UO2-16_43  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin1644 { id 1644; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_44 UO2-16_44 UO2-16_44 UO2-16_44 UO2-16_44  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1645 { id 1645; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_45 UO2-16_45 UO2-16_45 UO2-16_45 UO2-16_45  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin1646 { id 1646; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_46 UO2-16_46 UO2-16_46 UO2-16_46 UO2-16_46  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1647 { id 1647; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_47 UO2-16_47 UO2-16_47 UO2-16_47 UO2-16_47  Helium Zircaloy Water Water Water Water Water Water);}
+
+pin1648 { id 1648; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_48 UO2-16_48 UO2-16_48 UO2-16_48 UO2-16_48  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1649 { id 1649; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_49 UO2-16_49 UO2-16_49 UO2-16_49 UO2-16_49  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin1650 { id 1650; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_50 UO2-16_50 UO2-16_50 UO2-16_50 UO2-16_50  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1651 { id 1651; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_51 UO2-16_51 UO2-16_51 UO2-16_51 UO2-16_51  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin1652 { id 1652; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_52 UO2-16_52 UO2-16_52 UO2-16_52 UO2-16_52  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1653 { id 1653; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_53 UO2-16_53 UO2-16_53 UO2-16_53 UO2-16_53  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin1654 { id 1654; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_54 UO2-16_54 UO2-16_54 UO2-16_54 UO2-16_54  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1655 { id 1655; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_55 UO2-16_55 UO2-16_55 UO2-16_55 UO2-16_55  Helium Zircaloy Water Water Water Water Water Water);}
+  
+     pin1656 { id 1656; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_56 UO2-16_56 UO2-16_56 UO2-16_56 UO2-16_56  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1657 { id 1657; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_57 UO2-16_57 UO2-16_57 UO2-16_58 UO2-16_59  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin1658 { id 1658; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_58 UO2-16_58 UO2-16_58 UO2-16_58 UO2-16_58  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1659 { id 1659; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_59 UO2-16_59 UO2-16_59 UO2-16_59 UO2-16_59  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin1660 { id 1660; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_60 UO2-16_60 UO2-16_60 UO2-16_60 UO2-16_60  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1661 { id 1661; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_61 UO2-16_61 UO2-16_61 UO2-16_61 UO2-16_61  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin1662 { id 1662; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_62 UO2-16_62 UO2-16_62 UO2-16_62 UO2-16_62  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1663 { id 1663; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_63 UO2-16_63 UO2-16_63 UO2-16_63 UO2-16_63  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+     pin1664 { id 1664; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_64 UO2-16_64 UO2-16_64 UO2-16_64 UO2-16_64  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1665 { id 1665; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_65 UO2-16_65 UO2-16_65 UO2-16_65 UO2-16_65  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin1666 { id 1666; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_66 UO2-16_66 UO2-16_66 UO2-16_66 UO2-16_66  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1667 { id 1667; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_67 UO2-16_67 UO2-16_67 UO2-16_67 UO2-16_67  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin1668 { id 1668; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_68 UO2-16_68 UO2-16_68 UO2-16_68 UO2-16_68  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1669 { id 1669; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_69 UO2-16_69 UO2-16_69 UO2-16_69 UO2-16_69  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin1670 { id 1670; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_70 UO2-16_70 UO2-16_70 UO2-16_70 UO2-16_70  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin1671 { id 1671; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_71 UO2-16_71 UO2-16_71 UO2-16_71 UO2-16_71  Helium Zircaloy Water Water Water Water Water Water);}
+
+pin1672 { id 1672; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-16_72 UO2-16_72 UO2-16_72 UO2-16_72 UO2-16_72  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+////// 3.1 enriched fuel
+
+
+
+
+   //////// Degenerate homogenisation 
+
+
+   pin311 { id 311; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_1 UO2-31_1 UO2-31_1 UO2-31_1 UO2-31_1  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin312 { id 312; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_2 UO2-31_2 UO2-31_2 UO2-31_2 UO2-31_2  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin313 { id 313; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_3 UO2-31_3 UO2-31_3 UO2-31_3 UO2-31_3  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin314 { id 314; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_4 UO2-31_4 UO2-31_4 UO2-31_4 UO2-31_4 Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin315 { id 315; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_5 UO2-31_5 UO2-31_5 UO2-31_5 UO2-31_5  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin316 { id 316; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_6 UO2-31_6 UO2-31_6 UO2-31_6 UO2-31_6  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin317 { id 317; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_7 UO2-31_7 UO2-31_7 UO2-31_7 UO2-31_7  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin318 { id 318; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_8 UO2-31_8 UO2-31_8 UO2-31_8 UO2-31_8  Helium Zircaloy Water Water Water Water Water Water);}
+  
+     pin319 { id 319; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_9 UO2-31_9 UO2-31_9 UO2-31_9 UO2-31_9  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3110 { id 3110; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_10 UO2-31_10 UO2-31_10 UO2-31_10 UO2-31_10  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin3111 { id 3111; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_11 UO2-31_11 UO2-31_11 UO2-31_11 UO2-31_11  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3112 { id 3112; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_12 UO2-31_12 UO2-31_12 UO2-31_12 UO2-31_12  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin3113 { id 3113; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_13 UO2-31_13 UO2-31_13 UO2-31_13 UO2-31_13  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3114 { id 3114; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_14 UO2-31_14 UO2-31_14 UO2-31_14 UO2-31_14  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin3115 { id 3115; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_15 UO2-31_15 UO2-31_15 UO2-31_15 UO2-31_15  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3116 { id 3116; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_16 UO2-31_16 UO2-31_16 UO2-31_16 UO2-31_16  Helium Zircaloy Water Water Water Water Water Water);}
+
+pin3117 { id 3117; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_17 UO2-31_17 UO2-31_17 UO2-31_17 UO2-31_17  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3118 { id 3118; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_18 UO2-31_18 UO2-31_18 UO2-31_18 UO2-31_18  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin3119 { id 3119; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_19 UO2-31_19 UO2-31_19 UO2-31_19 UO2-31_19  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3120 { id 3120; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_20 UO2-31_20 UO2-31_20 UO2-31_20 UO2-31_20  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin3121 { id 3121; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_21 UO2-31_21 UO2-31_21 UO2-31_21 UO2-31_21  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3122 { id 3122; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_22 UO2-31_22 UO2-31_22 UO2-31_22 UO2-31_22  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin3123 { id 3123; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_23 UO2-31_23 UO2-31_23 UO2-31_23 UO2-31_23  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3124 { id 3124; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_24 UO2-31_24 UO2-31_24 UO2-31_24 UO2-31_24  Helium Zircaloy Water Water Water Water Water Water);}
+  
+     pin3125 { id 3125; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_25 UO2-31_25 UO2-31_25 UO2-31_25 UO2-31_25  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3126 { id 3126; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_26 UO2-31_26 UO2-31_26 UO2-31_26 UO2-31_26  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin3127 { id 3127; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_27 UO2-31_27 UO2-31_27 UO2-31_27 UO2-31_27  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3128 { id 3128; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_28 UO2-31_28 UO2-31_28 UO2-31_28 UO2-31_28  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin3129 { id 3129; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_29 UO2-31_29 UO2-31_29 UO2-31_29 UO2-31_29  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3130 { id 3130; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_30 UO2-31_30 UO2-31_30 UO2-31_30 UO2-31_30  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin3131 { id 3131; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_31 UO2-31_31 UO2-31_31 UO2-31_31 UO2-31_31  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3132 { id 3132; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_32 UO2-31_32 UO2-31_32 UO2-31_32 UO2-31_32  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+
+pin3133 { id 3133; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_33 UO2-31_33 UO2-31_33 UO2-31_33 UO2-31_33  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3134 { id 3134; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_34 UO2-31_34 UO2-31_34 UO2-31_34 UO2-31_34  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin3135 { id 3135; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_35 UO2-31_35 UO2-31_35 UO2-31_35 UO2-31_35  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3136 { id 3136; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_36 UO2-31_36 UO2-31_36 UO2-31_36 UO2-31_36 Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin3137 { id 3137; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_37 UO2-31_37 UO2-31_37 UO2-31_37 UO2-31_37  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3138 { id 3138; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_38 UO2-31_38 UO2-31_38 UO2-31_38 UO2-31_38  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin3139 { id 3139; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_39 UO2-31_39 UO2-31_39 UO2-31_39 UO2-31_39  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3140 { id 3140; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_40 UO2-31_40 UO2-31_40 UO2-31_40 UO2-31_40  Helium Zircaloy Water Water Water Water Water Water);}
+  
+     pin3141 { id 3141; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_41 UO2-31_41 UO2-31_41 UO2-31_41 UO2-31_41  Helium Zircaloy Water Water Water Water Water Water);}
+  
+
+   pin3142 { id 3142; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_42 UO2-31_42 UO2-31_42 UO2-31_42 UO2-31_42  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3143 { id 3143; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_43 UO2-31_43 UO2-31_43 UO2-31_43 UO2-31_43  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin3144 { id 3144; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_44 UO2-31_44 UO2-31_44 UO2-31_44 UO2-31_44  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3145 { id 3145; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_45 UO2-31_45 UO2-31_45 UO2-31_45 UO2-31_45  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin3146 { id 3146; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_46 UO2-31_46 UO2-31_46 UO2-31_46 UO2-31_46  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3147 { id 3147; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_47 UO2-31_47 UO2-31_47 UO2-31_47 UO2-31_47  Helium Zircaloy Water Water Water Water Water Water);}
+
+pin3148 { id 3148; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_48 UO2-31_48 UO2-31_48 UO2-31_48 UO2-31_48  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3149 { id 3149; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_49 UO2-31_49 UO2-31_49 UO2-31_49 UO2-31_49  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin3150 { id 3150; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_50 UO2-31_50 UO2-31_50 UO2-31_50 UO2-31_50  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3151 { id 3151; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_51 UO2-31_51 UO2-31_51 UO2-31_51 UO2-31_51  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin3152 { id 3152; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_52 UO2-31_52 UO2-31_52 UO2-31_52 UO2-31_52  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3153 { id 3153; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_53 UO2-31_53 UO2-31_53 UO2-31_53 UO2-31_53  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin3154 { id 3154; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_54 UO2-31_54 UO2-31_54 UO2-31_54 UO2-31_54  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3155 { id 3155; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_55 UO2-31_55 UO2-31_55 UO2-31_55 UO2-31_55  Helium Zircaloy Water Water Water Water Water Water);}
+  
+     pin3156 { id 3156; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_56 UO2-31_56 UO2-31_56 UO2-31_56 UO2-31_56  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3157 { id 3157; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_57 UO2-31_57 UO2-31_57 UO2-31_58 UO2-31_59  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin3158 { id 3158; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_58 UO2-31_58 UO2-31_58 UO2-31_58 UO2-31_58  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3159 { id 3159; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_59 UO2-31_59 UO2-31_59 UO2-31_59 UO2-31_59  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin3160 { id 3160; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_60 UO2-31_60 UO2-31_60 UO2-31_60 UO2-31_60  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3161 { id 3161; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_61 UO2-31_61 UO2-31_61 UO2-31_61 UO2-31_61  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin3162 { id 3162; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_62 UO2-31_62 UO2-31_62 UO2-31_62 UO2-31_62  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3163 { id 3163; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_63 UO2-31_63 UO2-31_63 UO2-31_63 UO2-31_63  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+     pin3164 { id 3164; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_64 UO2-31_64 UO2-31_64 UO2-31_64 UO2-31_64  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3165 { id 3165; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_65 UO2-31_65 UO2-31_65 UO2-31_65 UO2-31_65  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin3166 { id 3166; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_66 UO2-31_66 UO2-31_66 UO2-31_66 UO2-31_66  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3167 { id 3167; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_67 UO2-31_67 UO2-31_67 UO2-31_67 UO2-31_67  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+   pin3168 { id 3168; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_68 UO2-31_68 UO2-31_68 UO2-31_68 UO2-31_68  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3169 { id 3169; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_69 UO2-31_69 UO2-31_69 UO2-31_69 UO2-31_69  Helium Zircaloy Water Water Water Water Water Water);}
+
+   pin3170 { id 3170; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_70 UO2-31_70 UO2-31_70 UO2-31_70 UO2-31_70  Helium Zircaloy Water Water Water Water Water Water);}
+  
+pin3171 { id 3171; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_71 UO2-31_71 UO2-31_71 UO2-31_71 UO2-31_71  Helium Zircaloy Water Water Water Water Water Water);}
+
+pin3172 { id 3172; type azimPinUniverse; naz 8;
+    radii (0.17539  0.25804 0.30378 0.35078 0.39218 0.40005 0.45720 0.57065 0.66503 0.74758 0.82188 0.89 0.0);
+    fills ( UO2-31_72 UO2-31_72 UO2-31_72 UO2-31_72 UO2-31_72  Helium Zircaloy Water Water Water Water Water Water);}
+
+
+
+
+
+
+
+
+
+
+   A14E31 { // 3.1% enriched assembly without BPs
+      id 1431;
+      type latUniverse;
+      origin (0 0 0.0);
+      pitch (1.26 1.26 0.0);
+      shape (9 9 0);
+      padMat Water;
+      map (
+        311 312 313 314 315 316 317 318 319 
+        3110 3111 3112 3113 3114 3115 3116 3117 3118
+        12 3119 3120 12 3121 3122 3123 3124 3125
+        3126 3127 3128 3129 3130 12 3131 3132 3133
+        3134 3135 3136 3137 3138 3139 3140 3141 3142
+        12 3143 3144 12 3145 3146 12 3147 3148
+        3149 3150 3151 3152 3153 3154 3155 3156 3157
+        3158 3159 3160 3161 3162 3163 3164 3165 3166
+        14 3167 3168 12 3169 3170 12 3171 3172
+        ); }
+
+
+      A14E16 { // 1.6 enriched assemnly (no BPs)
+      id 1416;
+      type latUniverse;
+      origin (0 0 0.0);
+      pitch (1.26 1.26 0.0);
+      shape (9 9 0);
+      padMat Water;
+      map (
+        161 162 163 164 165 166 167 168 169 
+        1610 1611 1612 1613 1614 1615 1616 1617 1618 
+        12 1619 1620 12 1621 1622 1623 1624 1625 
+        1626 1627 1628 1629 1630 12 1631 1632 1633 
+        1634 1635 1636 1637 1638 1639 1640 1641 1642 
+        12 1643 1644 12 1645 1646 12 1647 1648 
+        1649 1650 1651 1652 1653 1654 1655 1656 1657
+        1658 1659 1660 1661 1662 1663 1664 1665 1666 
+        14 1667 1668 12 1669 1670 12 1671 1672
+  ); }
+
+     A20E31 { // 3.1% enriched assembly with 20 BPs
+      id 2031;
+      type latUniverse;
+      origin (0 0 0.0);
+      pitch (1.26 1.26 0.0);
+      shape (9 9 0);
+      padMat Water;
+ 
+ map (
+  311 312 313 314 315 316 317 318 319 
+  3110 3111 3112 3113 3114 3115 3116 3117 3118
+  10 3119 3120 10 3121 3122 3123 3124 3125
+  3126 3127 3128 3129 3130 10 3131 3132 3133
+  3134 3135 3136 3137 3138 3139 3140 3141 3142
+  12 3143 3144 10 3145 3146 10 3147 3148
+  3149 3150 3151 3152 3153 3154 3155 3156 3157
+  3158 3159 3160 3161 3162 3163 3164 3165 3166
+  14 3167 3168 12 3169 3170 10 3171 3172
+  ); }
+  
+  
+  
+  }
+}
+
+
+viz {
+  myVTK {
+    type vtk;
+    what uniqueID; 
+    corner (-10.71 -10.71 0);
+    width (21.42 21.42 0);
+    vox (500 500 1);
+  }
+  bmpID { 
+    type bmp;
+    output QuarterAssembly_RR_id;
+    what uniqueID; 
+    centre (0.0 0.0 0); 
+    axis z; 
+    res (5000 5000);  }
+
+  bmpMat { 
+    type bmp; 
+    output QuarterAssembly_RR_mat; 
+    what material; 
+    centre (0.0 0.0 0); 
+    axis z; 
+    res (2000 2000);  }
+} 
+
+
+nuclearData {
+  handles {
+    mg {type baseMgNeutronDatabase; PN P0;}
+  }
+
+materials {
+
+
+//mix of uranium and water
+Air { 
+      temp 0;
+      composition {}
+      xsFile materialsInputs/Air ;   }
+
+SS304 { 
+      temp 0;
+      composition {}
+      xsFile materialsInputs/SS304;  }
+
+Helium
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/Helium;  }
+
+BorosilicateGlass
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/BorosilicateGlass;  }
+
+Zircaloy
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/Zircaloy;  }
+
+Water
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/Water;  }
+
+UO2-16
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16;  }    
+  
+
+
+UO2-31
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31;  }
+
+  UO2-16_1
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_1;  }
+  
+  
+  UO2-16_2
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_2;  }
+  
+    UO2-16_3
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_3;  }
+  
+  
+  UO2-16_4
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_4;  }
+  
+    UO2-16_5
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-16_5;  }
+    
+    
+    UO2-16_6
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-16_6;  }
+    
+      UO2-16_7
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-16_7;  }
+    
+    
+    UO2-16_8
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_8;  }
+  
+    
+    UO2-16_9
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-16_9;  }
+    
+    
+    UO2-16_10
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-16_10;  }
+    
+      UO2-16_11
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-16_11;  }
+    
+    
+    UO2-16_12
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-16_12;  }
+  
+      UO2-16_13
+      { temp 0;
+        composition  {}
+        xsFile materialsInputs/UO2-16_13;  }
+      
+      
+  UO2-16_14
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_14;  }
+  
+    UO2-16_15
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_15;  }
+  
+  
+  UO2-16_16
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_16;  }
+  
+    UO2-16_17
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-16_17;  }
+    
+    
+    UO2-16_18
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-16_18;  }
+    
+      UO2-16_19
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-16_19;  }
+    
+    
+    UO2-16_20
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_20;  }
+
+
+    
+  UO2-16_21
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_21;  }
+  
+  
+  UO2-16_22
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_22;  }
+  
+    UO2-16_23
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_23;  }
+  
+  
+  UO2-16_24
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_24;  }
+
+    UO2-16_25
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-16_25;  }
+    
+    
+    UO2-16_26
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-16_26;  }
+    
+      UO2-16_27
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-16_27;  }
+        
+        
+UO2-16_28
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-16_28;  }
+
+UO2-16_29
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-16_29;  }
+
+
+UO2-16_30
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-16_30;  }
+
+UO2-16_31
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-16_31;  }
+
+
+UO2-16_32
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-16_32;  }
+
+
+UO2-16_33
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-16_33;  }
+
+
+UO2-16_34
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-16_34;  }
+
+UO2-16_35
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-16_35;  }
+
+
+UO2-16_36
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-16_36;  }
+
+UO2-16_37
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-16_37;  }
+
+
+UO2-16_38
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-16_38;  }
+
+UO2-16_39
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-16_39;  }
+
+
+UO2-16_40
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-16_40;  }
+
+UO2-16_41
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16_41;  }
+
+
+UO2-16_42
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16_42;  }
+
+
+UO2-16_43
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16_43;  }
+
+  UO2-16_44
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16_44;  }
+
+
+UO2-16_45
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-16_45;  }
+
+
+UO2-16_46
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16_46;  }
+
+
+UO2-16_47
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16_47;  }
+
+  UO2-16_48
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16_48;  }
+
+
+UO2-16_49
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16_49;  }
+
+  UO2-16_50
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16_50;  }
+
+
+UO2-16_51
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16_51;  }
+
+  UO2-16_52
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16_52;  }
+
+
+UO2-16_53
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16_53;  }
+
+  UO2-16_54
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_54;  }
+  
+  
+  UO2-16_55
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_55;  }
+  
+    UO2-16_56
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_56;  }
+  
+  
+  UO2-16_57
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16_57;  }
+
+  
+  UO2-16_58
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_58;  }
+  
+  
+  UO2-16_59
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_59;  }
+  
+    UO2-16_60
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-16_60;  }
+  
+
+    UO2-16_61
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-16_61;  }
+    
+      UO2-16_62
+      { temp 0;
+        composition  {}
+        xsFile materialsInputs/UO2-16_62;  }
+      
+      
+      UO2-16_63
+      { temp 0;
+        composition  {}
+        xsFile materialsInputs/UO2-16_63;  }
+      
+        UO2-16_64
+      { temp 0;
+        composition  {}
+        xsFile materialsInputs/UO2-16_64;  }
+        
+        
+      UO2-16_65
+      { temp 0;
+        composition  {}
+        xsFile materialsInputs/UO2-16_65;  }
+      
+        UO2-16_66
+        { temp 0;
+          composition  {}
+          xsFile materialsInputs/UO2-16_66;  }
+        
+        
+        UO2-16_67
+        { temp 0;
+          composition  {}
+          xsFile materialsInputs/UO2-16_67;  }
+        
+          UO2-16_68
+        { temp 0;
+          composition  {}
+          xsFile materialsInputs/UO2-16_68;  }
+        
+        
+        UO2-16_69
+      { temp 0;
+        composition  {}
+        xsFile materialsInputs/UO2-16_69;  }
+      
+        
+        UO2-16_70
+        { temp 0;
+          composition  {}
+          xsFile materialsInputs/UO2-16_70;  }
+        
+        
+        UO2-16_71
+        { temp 0;
+          composition  {}
+          xsFile materialsInputs/UO2-16_71;  }
+        
+          UO2-16_72
+        { temp 0;
+          composition  {}
+          xsFile materialsInputs/UO2-16_72;  } 
+  
+  
+
+
+
+  UO2-31_1
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_1;  }
+  
+  
+  UO2-31_2
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_2;  }
+  
+    UO2-31_3
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_3;  }
+  
+  
+  UO2-31_4
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_4;  }
+  
+    UO2-31_5
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-31_5;  }
+    
+    
+    UO2-31_6
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-31_6;  }
+    
+      UO2-31_7
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-31_7;  }
+    
+    
+    UO2-31_8
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_8;  }
+  
+    
+    UO2-31_9
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-31_9;  }
+    
+    
+    UO2-31_10
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-31_10;  }
+    
+      UO2-31_11
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-31_11;  }
+    
+    
+    UO2-31_12
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-31_12;  }
+  
+      UO2-31_13
+      { temp 0;
+        composition  {}
+        xsFile materialsInputs/UO2-31_13;  }
+      
+      
+  UO2-31_14
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_14;  }
+  
+    UO2-31_15
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_15;  }
+  
+  
+  UO2-31_16
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_16;  }
+  
+    UO2-31_17
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-31_17;  }
+    
+    
+    UO2-31_18
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-31_18;  }
+    
+      UO2-31_19
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-31_19;  }
+    
+    
+    UO2-31_20
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_20;  }
+
+
+    
+  UO2-31_21
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_21;  }
+  
+  
+  UO2-31_22
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_22;  }
+  
+    UO2-31_23
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_23;  }
+  
+  
+  UO2-31_24
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_24;  }
+
+    UO2-31_25
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-31_25;  }
+    
+    
+    UO2-31_26
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-31_26;  }
+    
+      UO2-31_27
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-31_27;  }
+        
+        
+UO2-31_28
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-31_28;  }
+
+UO2-31_29
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-31_29;  }
+
+
+UO2-31_30
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-31_30;  }
+
+UO2-31_31
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-31_31;  }
+
+
+UO2-31_32
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-31_32;  }
+
+
+UO2-31_33
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-31_33;  }
+
+
+UO2-31_34
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-31_34;  }
+
+UO2-31_35
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-31_35;  }
+
+
+UO2-31_36
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-31_36;  }
+
+UO2-31_37
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-31_37;  }
+
+
+UO2-31_38
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-31_38;  }
+
+UO2-31_39
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-31_39;  }
+
+
+UO2-31_40
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-31_40;  }
+
+UO2-31_41
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31_41;  }
+
+
+UO2-31_42
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31_42;  }
+
+
+UO2-31_43
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31_43;  }
+
+  UO2-31_44
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31_44;  }
+
+
+UO2-31_45
+{ temp 0;
+composition  {}
+xsFile materialsInputs/UO2-31_45;  }
+
+
+UO2-31_46
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31_46;  }
+
+
+UO2-31_47
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31_47;  }
+
+  UO2-31_48
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31_48;  }
+
+
+UO2-31_49
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31_49;  }
+
+  UO2-31_50
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31_50;  }
+
+
+UO2-31_51
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31_51;  }
+
+  UO2-31_52
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31_52;  }
+
+
+UO2-31_53
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31_53;  }
+
+  UO2-31_54
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_54;  }
+  
+  
+  UO2-31_55
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_55;  }
+  
+    UO2-31_56
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_56;  }
+  
+  
+  UO2-31_57
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31_57;  }
+
+  
+  UO2-31_58
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_58;  }
+  
+  
+  UO2-31_59
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_59;  }
+  
+    UO2-31_60
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UO2-31_60;  }
+  
+
+    UO2-31_61
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/UO2-31_61;  }
+    
+      UO2-31_62
+      { temp 0;
+        composition  {}
+        xsFile materialsInputs/UO2-31_62;  }
+      
+      
+      UO2-31_63
+      { temp 0;
+        composition  {}
+        xsFile materialsInputs/UO2-31_63;  }
+      
+        UO2-31_64
+      { temp 0;
+        composition  {}
+        xsFile materialsInputs/UO2-31_64;  }
+        
+        
+      UO2-31_65
+      { temp 0;
+        composition  {}
+        xsFile materialsInputs/UO2-31_65;  }
+      
+        UO2-31_66
+        { temp 0;
+          composition  {}
+          xsFile materialsInputs/UO2-31_66;  }
+        
+        
+        UO2-31_67
+        { temp 0;
+          composition  {}
+          xsFile materialsInputs/UO2-31_67;  }
+        
+          UO2-31_68
+        { temp 0;
+          composition  {}
+          xsFile materialsInputs/UO2-31_68;  }
+        
+        
+        UO2-31_69
+      { temp 0;
+        composition  {}
+        xsFile materialsInputs/UO2-31_69;  }
+      
+        
+        UO2-31_70
+        { temp 0;
+          composition  {}
+          xsFile materialsInputs/UO2-31_70;  }
+        
+        
+        UO2-31_71
+        { temp 0;
+          composition  {}
+          xsFile materialsInputs/UO2-31_71;  }
+        
+          UO2-31_72
+        { temp 0;
+          composition  {}
+          xsFile materialsInputs/UO2-31_72;  }
+
+
+
+
+    
+
+}
+
+  
+}

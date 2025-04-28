@@ -6,15 +6,15 @@
 !! To achieve degernerate homogenisation, model quarter assembly to reduce number of pins to generate cross sections for. 
 type eigenPhysicsPackage;
 
-pop      10000;
-inactive 500;
-active   2000;
+pop      100000;
+inactive 100;
+active   500;
 XSdata ce;
 dataType ce;
 
 // Specify output format default asciiMATLAB
 outputFormat asciiJSON;
-outputFile FuelAssembly_MC_output;
+outputFile QuarterAssembly_MC_output;
 
 collisionOperator { neutronCE {type neutronCEstd;}}
 
@@ -27,8 +27,8 @@ inactiveTally {
 	    type shannonEntropyClerk;
             map {type multiMap;
             maps (xax yax);
-            xax { type spaceMap; grid lin; min -10.71; max 10.71; N 17; axis x;}
-            yax { type spaceMap; grid lin; min -10.71; max 10.71; N 17; axis y;}
+            xax { type spaceMap; grid lin; min -5.67; max 5.67; N 9; axis x;}
+            yax { type spaceMap; grid lin; min -5.67; max 5.67; N 9; axis y;}
                 }
            cycles 500;
           }
@@ -37,14 +37,14 @@ inactiveTally {
 activeTally {
   pinFiss  { type collisionClerk; response (fission); fission { type macroResponse; MT -6;}
                  map {type multiMap; maps (xax yax);
-                      xax {type spaceMap;  axis x;  grid lin; N 17; min -10.71; max 10.71; }
-                      yax {type spaceMap;  axis y;  grid lin; N 17; min -10.71; max 10.71; }
+                      xax {type spaceMap;  axis x;  grid lin; min -5.67; max 5.67; N 9; }
+                      yax {type spaceMap;  axis y;  grid lin;min -5.67; max 5.67; N 9; }
                      }
                   }
   u238Capture  { type collisionClerk; response (capture); capture { type microResponse; MT 102; material u238; }
                  map {type multiMap; maps (xax yax materialMap);
-                      xax {type spaceMap;  axis x;  grid lin; N 17; min -10.71; max 10.71; }
-                      yax {type spaceMap;  axis y;  grid lin; N 17; min -10.71; max 10.71; }
+                      xax {type spaceMap;  axis x;  grid lin; min -5.67; max 5.67; N 9; }
+                      yax {type spaceMap;  axis y;  grid lin; min -5.67; max 5.67; N 9; }
 
                       materialMap
                       {
@@ -81,7 +81,19 @@ activeTally {
                       material
                       {
                         type materialMap;
-                        materials (Air SS304 Helium BorosilicateGlass Water Zircaloy UO2-16 UO2-31);
+                        materials (Air SS304 Helium BorosilicateGlass Water Zircaloy UO2-16 UO2-31
+                          UO2-31_1 UO2-31_2 UO2-31_3 UO2-31_4 UO2-31_5 UO2-31_6 UO2-31_7 UO2-31_8 UO2-31_9 UO2-31_10 UO2-31_11 UO2-31_12 UO2-31_13 UO2-31_14 UO2-31_15 UO2-31_16 
+                          UO2-31_17 UO2-31_18 UO2-31_19 UO2-31_20 UO2-31_21 UO2-31_22 UO2-31_23 UO2-31_24 UO2-31_25 UO2-31_26 UO2-31_27 UO2-31_28 UO2-31_29 UO2-31_30 UO2-31_31 UO2-31_32
+                          UO2-31_33 UO2-31_34 UO2-31_35 UO2-31_36 UO2-31_37 UO2-31_38 UO2-31_39 UO2-31_40 UO2-31_41 UO2-31_42 UO2-31_43 UO2-31_44 UO2-31_45 UO2-31_46 UO2-31_47 UO2-31_48
+                          UO2-31_49 UO2-31_50 UO2-31_51 UO2-31_52 UO2-31_53 UO2-31_54 UO2-31_55 UO2-31_56 UO2-31_57 UO2-31_58 UO2-31_59 UO2-31_60 UO2-31_61 UO2-31_62 UO2-31_63 UO2-31_64
+                          UO2-31_65 UO2-31_66 UO2-31_67 UO2-31_68 UO2-31_69 UO2-31_70 UO2-31_71 UO2-31_72 
+                          
+                          UO2-16_1 UO2-16_2 UO2-16_3 UO2-16_4 UO2-16_5 UO2-16_6 UO2-16_7 UO2-16_8 UO2-16_9 UO2-16_10 UO2-16_11 UO2-16_12 UO2-16_13 UO2-16_14 UO2-16_15 UO2-16_16 
+                          UO2-16_17 UO2-16_18 UO2-16_19 UO2-16_20 UO2-16_21 UO2-16_22 UO2-16_23 UO2-16_24 UO2-16_25 UO2-16_26 UO2-16_27 UO2-16_28 UO2-16_29 UO2-16_30 UO2-16_31 UO2-16_32
+                          UO2-16_33 UO2-16_34 UO2-16_35 UO2-16_36 UO2-16_37 UO2-16_38 UO2-16_39 UO2-16_40 UO2-16_41 UO2-16_42 UO2-16_43 UO2-16_44 UO2-16_45 UO2-16_46 UO2-16_47 UO2-16_48
+                          UO2-16_49 UO2-16_50 UO2-16_51 UO2-16_52 UO2-16_53 UO2-16_54 UO2-16_55 UO2-16_56 UO2-16_57 UO2-16_58 UO2-16_59 UO2-16_60 UO2-16_61 UO2-16_62 UO2-16_63 UO2-16_64
+                          UO2-16_65 UO2-16_66 UO2-16_67 UO2-16_68 UO2-16_69 UO2-16_70 UO2-16_71 UO2-16_72 
+                        );
                     
                       }
                       energy
@@ -90,13 +102,13 @@ activeTally {
                         grid unstruct; // https://serpent.vtt.fi/mediawiki/index.php/CASMO_25-group_structure
 
                       // CASMO2
-                       bins (0 6.25e-7 20);
+                      //  bins (0 6.25e-7 20);
                       // CASMO4
                       // bins (0 6.25e-7 5.53e-3 8.21e-1 20);
                       // CASMO7
                       // bins (0  5.8e-8  1.4e-7  6.25e-7 4e-6  5.53e-3 8.21e-1 20);
                       // CASMO8
-                      // bins (0  5.8e-8  1.4e-7  2.8e-7  6.25e-7 4e-6  5.53e-3 8.21e-1 20);
+                      bins (0  5.8e-8  1.4e-7  2.8e-7  6.25e-7 4e-6  5.53e-3 8.21e-1 20);
                       // CASMO16
                       // bins (0 3e-8 5.8e-8 1.4e-7 2.8e-7 3.5e-7 6.25e-7 8.5e-7 9.72e-7 1.02e-6 1.097e-6 1.15e-6 1.3e-6 4e-6 5.53e-3 8.21e-1 20);
                       // CASMO25
@@ -120,7 +132,7 @@ activeTally {
                       grid unstruct; // https://serpent.vtt.fi/mediawiki/index.php/CASMO_25-group_structure
 
                       // CASMO2
-                       bins (0 6.25e-7 20);
+                      //  bins (0 6.25e-7 20);
                       // CASMO4
                       // bins (0 6.25e-7 5.53e-3 8.21e-1 20);
                       // CASMO7
@@ -134,7 +146,7 @@ activeTally {
                       // CASMO40
                       // bins (0 1.5e-8 3e-8 4.2e-8 5.8e-8  8e-8 1e-7 1.4e-7 1.8e-7 2.2e-7 2.8e-7 3.5e-7 6.25e-7 8.5e-7 9.5e-7 9.72e-7 1.02e-6 1.097e-6 1.15e-6  1.3e-6 1.5e-6 1.855e-6 2.1e-6  2.6e-6 3.3e-6 4e-6 9.877e-6 1.5968e-5 2.77e-5 4.8052e-5 1.48728e-4 5.53e-3 9.118e-3 1.11e-1 5e-1 8.21e-1 1.353 2.231 3.679 6.0655 20);
                       // CASMO70
-                      // bins (0  5e-9 1e-8 1.5e-8 2e-8 2.5e-8 3e-8  3.5e-8 4.2e-8 5e-8 5.8e-8  6.7e-8 8e-8 1e-7 1.4e-7 1.8e-7 2.2e-7 2.5e-7 2.8e-7  3e-7 3.2e-7 3.5e-7 4e-7 5e-7 6.25e-7 7.8e-7 8.5e-7 9.1e-7 9.5e-7 9.72e-7 9.96e-7 1.02e-6 1.045e-6 1.071e-6 1.097e-6 1.123e-6 1.15e-6 1.3e-6 1.5e-6 1.855e-6 2.1e-6 2.6e-6 3.3e-6 4e-6 9.877e-6 1.5968e-5 2.77e-5 4.8052e-5 7.55014e-5 1.48728e-4 3.67262e-4 9.06898e-4 1.4251e-3 2.23945e-3  3.519e-3 5.53e-3 9.118e-3 1.503e-2 2.478e-2 4.085e-2 6.743e-2 1.11e-1 1.83e-1 3.025e-1 5e-1 8.21e-1 1.353 2.231 3.679 6.0655 20);
+                      bins (0  5e-9 1e-8 1.5e-8 2e-8 2.5e-8 3e-8  3.5e-8 4.2e-8 5e-8 5.8e-8  6.7e-8 8e-8 1e-7 1.4e-7 1.8e-7 2.2e-7 2.5e-7 2.8e-7  3e-7 3.2e-7 3.5e-7 4e-7 5e-7 6.25e-7 7.8e-7 8.5e-7 9.1e-7 9.5e-7 9.72e-7 9.96e-7 1.02e-6 1.045e-6 1.071e-6 1.097e-6 1.123e-6 1.15e-6 1.3e-6 1.5e-6 1.855e-6 2.1e-6 2.6e-6 3.3e-6 4e-6 9.877e-6 1.5968e-5 2.77e-5 4.8052e-5 7.55014e-5 1.48728e-4 3.67262e-4 9.06898e-4 1.4251e-3 2.23945e-3  3.519e-3 5.53e-3 9.118e-3 1.503e-2 2.478e-2 4.085e-2 6.743e-2 1.11e-1 1.83e-1 3.025e-1 5e-1 8.21e-1 1.353 2.231 3.679 6.0655 20);
 
                     }
                     // in MeV
@@ -170,7 +182,7 @@ geometry {
   graph {type shrunk;}
 
   surfaces { 
-    boundingSurface { id 1; type zSquareCylinder; origin (0 0 0) ; halfwidth ( 5.355 5.355 0 );}
+    boundingSurface { id 1; type zSquareCylinder; origin (0.315 0.315 0) ; halfwidth ( 5.355 5.355 0 );}
     
    
   }
@@ -179,9 +191,9 @@ geometry {
   }
 
   universes {
+    // root { id 1; type rootUniverse; border 1; fill u<1416>; } // 1.6% enriched assembly without BPs
     // root { id 1; type rootUniverse; border 1; fill u<1431>; } // 3.1% enriched assembly without BPs
-    root { id 1; type rootUniverse; border 1; fill u<1416>; } // 1.6% enriched assembly without BPs
-    // root { id 1; type rootUniverse; border 1; fill u<2031>; } // 3.1% enriched assembly with 20 BPs
+    root { id 1; type rootUniverse; border 1; fill u<2031>; } // 3.1% enriched assembly with 20 BPs
 
     // Pin universes // need one universe for each pin... or just for each fuel pin? that leaves 72 individual pins for each lattice... just number them 1-72? but need the same for both enrichments. for the BP one, 
     //BP 
@@ -699,30 +711,10 @@ geometry {
 
     
     
-    // A14E31 { // 3.1% enriched assembly without BPs
-    //   id 1431;
-    //   type latUniverse;
-    //   origin (0.0 0.0 0.0);
-    //   pitch (1.26 1.26 0.0);
-    //   shape (9 9 0);
-    //   padMat Water;
-    //   map (
-    //     31 31 31 31 31 31 31 31 31 
-    //     31 31 31 31 31 31 31 31 31 
-    //     12 31 31 12 31 31 31 31 31 
-    //     31 31 31 31 31 12 31 31 31 
-    //     31 31 31 31 31 31 31 31 31 
-    //     12 31 31 12 31 31 12 31 31 
-    //     31 31 31 31 31 31 31 31 31 
-    //     31 31 31 31 31 31 31 31 31
-    //     14 31 31 12 31 31 12 31 31
-
-    //   ); }
-
       A14E31 { // 3.1% enriched assembly without BPs
       id 1431;
       type latUniverse;
-      origin (-0.315 -0.315 0.0);
+      origin (0.0 0.0 0.0);
       pitch (1.26 1.26 0.0);
       shape (9 9 0);
       padMat Water;
@@ -742,7 +734,7 @@ geometry {
       A14E16 { // 1.6 enriched assemnly (no BPs)
       id 1416;
       type latUniverse;
-      origin (-0.315 -0.315 0.0);
+      origin (0.0 0.0 0.0);
       pitch (1.26 1.26 0.0);
       shape (9 9 0);
       padMat Water;
@@ -764,21 +756,22 @@ geometry {
      A20E31 { // 3.1% enriched assembly with 20 BPs
       id 2031;
       type latUniverse;
-      origin (0.0 0.0 0.0);
+      origin (0 0 0.0);
       pitch (1.26 1.26 0.0);
       shape (9 9 0);
       padMat Water;
-      map (
-        31 31 31 31 31 31 31 31 31 
-        31 31 31 31 31 31 31 31 31 
-        10 31 31 10 31 31 31 31 31 
-        31 31 31 31 31 10 31 31 31 
-        31 31 31 31 31 31 31 31 31 
-        12 31 31 10 31 31 10 31 31 
-        31 31 31 31 31 31 31 31 31 
-        31 31 31 31 31 31 31 31 31
-        14 31 31 12 31 31 10 31 31
- ); }
+ 
+ map (
+  311 312 313 314 315 316 317 318 319 
+  3110 3111 3112 3113 3114 3115 3116 3117 3118
+  10 3119 3120 10 3121 3122 3123 3124 3125
+  3126 3127 3128 3129 3130 10 3131 3132 3133
+  3134 3135 3136 3137 3138 3139 3140 3141 3142
+  12 3143 3144 10 3145 3146 10 3147 3148
+  3149 3150 3151 3152 3153 3154 3155 3156 3157
+  3158 3159 3160 3161 3162 3163 3164 3165 3166
+  14 3167 3168 12 3169 3170 10 3171 3172
+  ); }
 
  
   }
@@ -788,7 +781,7 @@ geometry {
 viz {
   bmp {
     type bmp;
-    output fuelassemblyMaterials_MC;
+    output quarterAssem_Mat_MC;
     what material;
     centre (0.0 0.0 0.0);
     //width (25.0 25.0);

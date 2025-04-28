@@ -8,14 +8,14 @@ type eigenPhysicsPackage;
 pop      100000;
 inactive 100;
 active   2000;
-XSdata ce;
-dataType ce;
+XSdata mgData;
+dataType mg;
 
 // Specify output format default asciiMATLAB
 outputFormat asciiJSON;
-outputFile FuelAssembly_MC_output;
+outputFile FuelAssembly_MC_MG_output;
 
-collisionOperator { neutronCE {type neutronCEstd;}}
+collisionOperator { neutronMG {type neutronMGstd;} }
 
 transportOperator { 
                     type transportOperatorHT; cache 1;
@@ -40,18 +40,19 @@ activeTally {
                       yax {type spaceMap;  axis y;  grid lin; N 17; min -10.71; max 10.71; }
                      }
                   }
-  u238Capture  { type collisionClerk; response (capture); capture { type microResponse; MT 102; material u238; }
-                 map {type multiMap; maps (xax yax materialMap);
-                      xax {type spaceMap;  axis x;  grid lin; N 17; min -10.71; max 10.71; }
-                      yax {type spaceMap;  axis y;  grid lin; N 17; min -10.71; max 10.71; }
+  // u238Capture  { type collisionClerk; response (capture); capture { type microResponse; MT 102; material u238; }
+  //                map {type multiMap; maps (xax yax materialMap);
+  //                     xax {type spaceMap;  axis x;  grid lin; N 17; min -10.71; max 10.71; }
+  //                     yax {type spaceMap;  axis y;  grid lin; N 17; min -10.71; max 10.71; }
 
-                      materialMap
-                      {
-                        type materialMap;
-                        materials (UO2-31 UO2-16);
-                      }
-                     }
-                  }
+  //                     materialMap
+  //                     {
+  //                       type materialMap;
+  //                       materials ( UO2-31 UO2-16 );
+                    
+  //                     }
+  //                    }
+  //                 }
 
   
                   fluxSpectrum
@@ -95,15 +96,15 @@ activeTally {
                       }
                     }
                   }
-                  scatteringMatrices
-                  {
-                    type mgXsClerk;
+                  // scatteringMatrices
+                  // {
+                  //   type mgXsClerk;
 
-                    // energyMap {type energyMap; grid log; min 1e-11; max 2e1; N 120;} // in MeV
-                    energyMap
-                    {
-                      type energyMap;
-                      grid unstruct; // https://serpent.vtt.fi/mediawiki/index.php/CASMO_25-group_structure
+                  //   // energyMap {type energyMap; grid log; min 1e-11; max 2e1; N 120;} // in MeV
+                  //   energyMap
+                  //   {
+                  //     type energyMap;
+                  //     grid unstruct; // https://serpent.vtt.fi/mediawiki/index.php/CASMO_25-group_structure
 
                       // CASMO2
                       //  bins (0 6.25e-7 20);
@@ -120,20 +121,20 @@ activeTally {
                       // CASMO40
                       // bins (0 1.5e-8 3e-8 4.2e-8 5.8e-8  8e-8 1e-7 1.4e-7 1.8e-7 2.2e-7 2.8e-7 3.5e-7 6.25e-7 8.5e-7 9.5e-7 9.72e-7 1.02e-6 1.097e-6 1.15e-6  1.3e-6 1.5e-6 1.855e-6 2.1e-6  2.6e-6 3.3e-6 4e-6 9.877e-6 1.5968e-5 2.77e-5 4.8052e-5 1.48728e-4 5.53e-3 9.118e-3 1.11e-1 5e-1 8.21e-1 1.353 2.231 3.679 6.0655 20);
                       // CASMO70
-                      bins (0  5e-9 1e-8 1.5e-8 2e-8 2.5e-8 3e-8  3.5e-8 4.2e-8 5e-8 5.8e-8  6.7e-8 8e-8 1e-7 1.4e-7 1.8e-7 2.2e-7 2.5e-7 2.8e-7  3e-7 3.2e-7 3.5e-7 4e-7 5e-7 6.25e-7 7.8e-7 8.5e-7 9.1e-7 9.5e-7 9.72e-7 9.96e-7 1.02e-6 1.045e-6 1.071e-6 1.097e-6 1.123e-6 1.15e-6 1.3e-6 1.5e-6 1.855e-6 2.1e-6 2.6e-6 3.3e-6 4e-6 9.877e-6 1.5968e-5 2.77e-5 4.8052e-5 7.55014e-5 1.48728e-4 3.67262e-4 9.06898e-4 1.4251e-3 2.23945e-3  3.519e-3 5.53e-3 9.118e-3 1.503e-2 2.478e-2 4.085e-2 6.743e-2 1.11e-1 1.83e-1 3.025e-1 5e-1 8.21e-1 1.353 2.231 3.679 6.0655 20);
+                      // bins (0  5e-9 1e-8 1.5e-8 2e-8 2.5e-8 3e-8  3.5e-8 4.2e-8 5e-8 5.8e-8  6.7e-8 8e-8 1e-7 1.4e-7 1.8e-7 2.2e-7 2.5e-7 2.8e-7  3e-7 3.2e-7 3.5e-7 4e-7 5e-7 6.25e-7 7.8e-7 8.5e-7 9.1e-7 9.5e-7 9.72e-7 9.96e-7 1.02e-6 1.045e-6 1.071e-6 1.097e-6 1.123e-6 1.15e-6 1.3e-6 1.5e-6 1.855e-6 2.1e-6 2.6e-6 3.3e-6 4e-6 9.877e-6 1.5968e-5 2.77e-5 4.8052e-5 7.55014e-5 1.48728e-4 3.67262e-4 9.06898e-4 1.4251e-3 2.23945e-3  3.519e-3 5.53e-3 9.118e-3 1.503e-2 2.478e-2 4.085e-2 6.743e-2 1.11e-1 1.83e-1 3.025e-1 5e-1 8.21e-1 1.353 2.231 3.679 6.0655 20);
 
-                    }
+                    // }
                     // in MeV
 
-                    spaceMap
-                    {
-                      type materialMap;
-                      materials (Air SS304 Helium BorosilicateGlass Water Zircaloy UO2-16 UO2-31 );
-                    }
+                  //   spaceMap
+                  //   {
+                  //     type materialMap;
+                  //     materials (Air SS304 Helium BorosilicateGlass Water Zircaloy UO2-16 UO2-31 );
+                  //   }
           
 
-                    PN 1;
-                  }
+                  //   PN 1;
+                  // }
 }
 
 geometry {
@@ -280,204 +281,53 @@ viz {
 
 nuclearData {
   handles {
-    ce {type aceNeutronDatabase; aceLibrary $SCONE_ACE; ures 0;}
-    // ce {type aceNeutronDatabase; aceLibrary $ENDFB7; ures 0;}
+     mgData {type baseMgNeutronDatabase;  PN P0;}
   }
-  materials {
-
-  ! Note that temperatures should be modified.
-  ! Reactor is isothermal and coolant temperature should be 566K.
-  ! This data is not directly available and we do not yet use
-  ! stochastic mixing or OTF Doppler.
-  ! Some libraries may not contain all isotopes present here.
-  ! These are commented out.
-
-    Air {
-      temp 600; // Boyd thesis p161 //566; original
-      composition {
-      18036.06 7.9414e-10; // Boyd thesis Table B.1  //7.8730E-09;
-      18038.06 1.4915e-10; // Boyd thesis Table B.1  //1.4844E-09;
-      18040.06 2.3506e-7;  // Boyd thesis Table B.1  //2.3506E-06;
-      6012.06  6.7565e-09;// Boyd thesis Table B.1  //6.7539E-08; original
-
-      // 18036.06 7.8730E-09; //original
-      // 18038.06 1.4844E-09; //original
-      // 18040.06 2.3506E-06;  //original
-      // 6012.06  6.7539E-08;// original
-      //6013.06  7.5658E-10;
-      7014.06  1.9681E-05; // Boyd thesis Table B.1  // 1.9680E-04; original
-      7015.06  7.1900E-08; // Boyd thesis Table B.1  // 7.2354E-07; original
-      8016.06  5.2864E-06; // Boyd thesis Table B.1  // 5.2866E-05; original
-      8017.06  2.0137E-09; // Boyd thesis Table B.1  // 2.0084E-08; original
-
-      // 7014.06  1.9680E-04;//  original
-      // 7015.06  7.2354E-07;//  original
-      // 8016.06  5.2866E-05; // original
-      // 8017.06  2.0084E-08; // original
+  materials  {
 
 
+//mix of uranium and water
+Air { 
+      temp 0;
+      composition {}
+      xsFile materialsInputs/Air ;   }
 
-      //8018.06  1.0601E-07; original
-      }
-      }
+SS304 { 
+      temp 0;
+      composition {}
+      xsFile materialsInputs/SS304;  }
 
-    Helium {
-      temp 600; // Boyd thesis p161 //566;
-      composition {
-      // 2003.06 4.8089E-10; // None in Boyd thesis Table B.6
-      2004.06 2.4044E-04; }
-      }
+Helium
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/Helium;  }
 
+BorosilicateGlass
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/BorosilicateGlass;  }
 
-    Water {
-      temp 600; // Boyd thesis p161 //566;
-      moder {1001.06 lwj3.11; }
-      composition {
-      5010.06 8.0042e-6; // Boyd thesis Table B.1 //7.9714E-06; original
-      5011.06 3.2218e-5; // Boyd thesis Table B.1 //3.2247E-05;  original
-      1001.06 4.9457e-2; // Boyd thesis Table B.1 //4.9456E-02; original
-      1002.06 7.4196e-6; // Boyd thesis Table B.1 //7.7035E-06;original
-      8016.06 2.4672e-2; // Boyd thesis Table B.1 //2.4673E-02;original
-      8017.06 9.3982e-6; // Boyd thesis Table B.1 //9.3734E-06;original
-      //8018.06 4.9474E-05; original
-      }
-      }
+Zircaloy
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/Zircaloy;  }
 
-    Zircaloy {
-      temp 600; // Boyd thesis p161 //566;
-      composition {
-      24050.06 3.2962E-06;
-      24052.06 6.3564E-05;
-      24053.06 7.2076E-06;
-      24054.06 1.7941E-06;
-      26054.06 8.6699e-06; // Boyd thesis Table B.8 //8.6698E-06;
-      26056.06 1.3610E-04;
-      26057.06 3.1431E-06;
-      26058.06 4.1829E-07;
-      8016.06  3.0743e-04; // Boyd thesis Table B.8 // 3.0744E-04;
-      8017.06  1.1711e-07; // Boyd thesis Table B.8 //1.1680E-07;
-      //8018.06  6.1648E-07;
-      50112.06 4.6735E-06;
-      50114.06 3.1799E-06;
-      50115.06 1.6381E-06;
-      50116.06 7.0055E-05;
-      50117.06 3.7003E-05;
-      50118.06 1.1669E-04;
-      50119.06 4.1387E-05;
-      50120.06 1.5697E-04;
-      50122.06 2.2308E-05;
-      50124.06 2.7897E-05;
-      40090.06 2.1828E-02;
-      40091.06 4.7600e-03; // Boyd thesis Table B.8 //4.7601E-03;
-      40092.06 7.2758e-03; // Boyd thesis Table B.8 //7.2759E-03;
-      40094.06 7.3734E-03;
-      40096.06 1.1879E-03; }
-      }
+Water
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/Water;  }
 
-   
+UO2-16
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16;  }
 
-    UO2-31 {
-      temp 600; // Boyd thesis p161 //566;
-      composition {
-      //8016.06   4.5853E-02; // original value
-      //8017.06   1.7420E-05; // original value
-      8016.06   4.5850E-02; // Copied from Boyd Thesis Table B.5
-      8017.06   1.7466E-05; // Copied from Boyd Thesis Table B.5
-      92234.06  5.7987E-06;
-      92235.06  7.2175E-04;
-      92238.06  2.2253E-02;}
-       }
-    UO2-16 {
-      temp 600;
-      composition {
-      // 8016.06   4.5897E-02; //original
-      // 8017.06   1.7436E-05; //original
-
-      8016.06 4.5895E-02; // Boyd thesis Table B.4
-      8017.06 1.7482E-05; // Boyd thesis Table B.4
-
-      //8018.06   9.2032E-05;
-     
-      92234.06  3.0131E-06;
-      92235.06  3.7503E-04;
-      92238.06  2.2625E-02;
-
-    
-    }
-      }
-      
-
-      SS304 {
-          temp 600;
-          composition {
-          24050.06 7.6778E-04;
-          24052.06 1.4806E-02;
-          24053.06 1.6789E-03;
-          24054.06 4.1791E-04;
-          26054.06 3.4620E-03;
-          26056.06 5.4345E-02;
-          26057.06 1.2551E-03;
-          26058.06 1.6703E-04;
-          25055.06 1.7604E-03;
-          28058.06 5.6089E-03;
-          28060.06 2.1605E-03;
-          28061.06 9.3917E-05;
-          28062.06 2.9945E-04;
-          28064.06 7.6261E-05;
-
-          14028.06 9.5274e-04; // Boyd thesis Table B.7
-          14029.06 4.8400e-05; // Boyd thesis Table B.7
-          14030.06 3.1943E-05; // Boyd thesis Table B.7
-
-          // 14028.06 9.5281E-04; //original
-          // 14029.06 4.8381E-05;//original
-          // 14030.06 3.1893E-05; //original}
-          }
-        }
-
-
-    BorosilicateGlass {
-      temp 600;
-      composition {
-      13027.06 1.7352E-03;
-      5010.06  9.6506E-04;
-      5011.06  3.9189E-03;
-
-      // 8016.06  4.6514E-02; // original
-      // 8017.06  1.7671E-05; // original
-
-      8016.06 4.6511E-02; // Boyd thesis Table B.3
-      8017.06 1.7717E-05; // Boyd thesis Table B.3
-
-      //8018.06  9.3268E-05;
-
-      // 14028.06 1.6926E-02; // original
-      // 14029.06 8.5944E-04; // original
-      // 14030.06 5.6654E-04; // original
-
-      14028.06 1.6924E-02; // Boyd thesis Table B.3
-      14029.06 8.5977E-04; // Boyd thesis Table B.3
-      14030.06 5.6743E-04; // Boyd thesis Table B.3
-    }
-      }
-    
-    u238 {
-      temp 600;
-      composition {
-        92238.06  2.2253E-02;
-      }
-    }
-
-  hydrogen{
-    temp 600;
-      composition {
-          1001.06 4.9457e-2;
-      }
-
-
-  }
-   
+UO2-31
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31;  }
 
 
 }
+
 }

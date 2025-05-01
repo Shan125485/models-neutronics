@@ -1,0 +1,354 @@
+!!
+!! A 2D slice of the BEAVRS benchmark
+!!
+!! Use ENDF/B-VII.1 library for consistency with Boyd thesis
+!! A 3.1% enriched fuel assembly with no burnable poisons
+type eigenPhysicsPackage;
+
+pop      100000;
+inactive 200;
+active   2000;
+XSdata mgData;
+dataType mg;
+
+// Specify output format default asciiMATLAB
+outputFormat asciiJSON;
+outputFile Colourset_MCMG_output;
+
+
+collisionOperator { neutronMG {type neutronMGstd;} }
+
+transportOperator { 
+                    type transportOperatorHT; cache 1;
+                  }
+
+inactiveTally {
+  shannon {
+	    type shannonEntropyClerk;
+            map {type multiMap;
+            maps (xax yax);
+            xax {type spaceMap;  axis x;  grid lin; N 34; min -21.42; max 21.42; } //edge colourset
+            yax {type spaceMap;  axis y;  grid lin; N 34; min -21.42; max 21.42; }
+                }
+           cycles 500;
+          }
+}
+
+activeTally {
+  pinFiss  { type collisionClerk; response (fission); fission { type macroResponse; MT -6;}
+                 map {type multiMap; maps (xax yax);
+                      xax {type spaceMap;  axis x;  grid lin; N 51; min -21.42; max 42.84; } //edge colourset
+                      yax {type spaceMap;  axis y;  grid lin; N 51; min -42.84; max 21.42; }
+                      // xax {type spaceMap;  axis x;  grid lin; N 34; min -21.42; max 21.42; }  //centre colourset
+                      // yax {type spaceMap;  axis y;  grid lin; N 34; min -21.42; max 21.42; }
+                     }
+                  }
+  // u238Capture  { type collisionClerk; response (capture); capture { type microResponse; MT 102; material u238; }
+  //                map {type multiMap; maps (xax yax materialMap);
+  //                 xax {type spaceMap;  axis x;  grid lin; N 51; min -21.42; max 42.84; }  //edge colourset
+  //                 yax {type spaceMap;  axis y;  grid lin; N 51; min -42.84; max 21.42; }
+  //                 // xax {type spaceMap;  axis x;  grid lin; N 34; min -21.42; max 21.42; }  //centre colourset
+  //                 // yax {type spaceMap;  axis y;  grid lin; N 34; min -21.42; max 21.42; }
+  //                     materialMap
+  //                     {
+  //                       type materialMap;
+  //                       materials (UO2-31 UO2-16);
+  //                     }
+  //                    }
+  //                 }
+
+  
+                  fluxSpectrum
+                  {
+                    type collisionClerk;
+                    response (flux);
+                    flux {type fluxResponse; }
+    
+                    map
+                    {
+                      type multiMap;
+                      maps (energy material);
+                      material
+                      {
+                        type materialMap;
+                        materials (Air SS304 Helium BorosilicateGlass Water Zircaloy UO2-16 UO2-31);
+                    
+                      }
+                      energy
+                      {
+                        type energyMap;
+                        grid unstruct; // https://serpent.vtt.fi/mediawiki/index.php/CASMO_25-group_structure
+
+                      // CASMO2
+                      //  bins (0 6.25e-7 20);
+                      // CASMO4
+                      // bins (0 6.25e-7 5.53e-3 8.21e-1 20);
+                      // CASMO7
+                      // bins (0  5.8e-8  1.4e-7  6.25e-7 4e-6  5.53e-3 8.21e-1 20);
+                      // CASMO8
+                      // bins (0  5.8e-8  1.4e-7  2.8e-7  6.25e-7 4e-6  5.53e-3 8.21e-1 20);
+                      // CASMO16
+                      // bins (0 3e-8 5.8e-8 1.4e-7 2.8e-7 3.5e-7 6.25e-7 8.5e-7 9.72e-7 1.02e-6 1.097e-6 1.15e-6 1.3e-6 4e-6 5.53e-3 8.21e-1 20);
+                      // CASMO25
+                      //  bins  (0 3e-8 5.8e-8  1.4e-7  2.8e-7  3.5e-7  6.25e-7 9.72e-7 1.02e-6 1.097e-6  1.15e-6 1.855e-6  4e-6  9.877e-6  1.5968e-5 1.48728e-4  5.53e-3 9.118e-3  1.11e-1 5e-1  8.21e-1 1.353 2.231 3.679 6.0655  20);
+                      // CASMO40
+                      // bins (0 1.5e-8 3e-8 4.2e-8 5.8e-8  8e-8 1e-7 1.4e-7 1.8e-7 2.2e-7 2.8e-7 3.5e-7 6.25e-7 8.5e-7 9.5e-7 9.72e-7 1.02e-6 1.097e-6 1.15e-6  1.3e-6 1.5e-6 1.855e-6 2.1e-6  2.6e-6 3.3e-6 4e-6 9.877e-6 1.5968e-5 2.77e-5 4.8052e-5 1.48728e-4 5.53e-3 9.118e-3 1.11e-1 5e-1 8.21e-1 1.353 2.231 3.679 6.0655 20);
+                      // CASMO70
+                      bins (0  5e-9 1e-8 1.5e-8 2e-8 2.5e-8 3e-8  3.5e-8 4.2e-8 5e-8 5.8e-8  6.7e-8 8e-8 1e-7 1.4e-7 1.8e-7 2.2e-7 2.5e-7 2.8e-7  3e-7 3.2e-7 3.5e-7 4e-7 5e-7 6.25e-7 7.8e-7 8.5e-7 9.1e-7 9.5e-7 9.72e-7 9.96e-7 1.02e-6 1.045e-6 1.071e-6 1.097e-6 1.123e-6 1.15e-6 1.3e-6 1.5e-6 1.855e-6 2.1e-6 2.6e-6 3.3e-6 4e-6 9.877e-6 1.5968e-5 2.77e-5 4.8052e-5 7.55014e-5 1.48728e-4 3.67262e-4 9.06898e-4 1.4251e-3 2.23945e-3  3.519e-3 5.53e-3 9.118e-3 1.503e-2 2.478e-2 4.085e-2 6.743e-2 1.11e-1 1.83e-1 3.025e-1 5e-1 8.21e-1 1.353 2.231 3.679 6.0655 20);
+
+                      }
+                    }
+                  }
+                  // scatteringMatrices
+                  // {
+                  //   type mgXsClerk;
+
+                  //   // energyMap {type energyMap; grid log; min 1e-11; max 2e1; N 120;} // in MeV
+                  //   energyMap
+                  //   {
+                  //     type energyMap;
+                  //     grid unstruct; // https://serpent.vtt.fi/mediawiki/index.php/CASMO_25-group_structure
+
+                  //     // CASMO2
+                  //     //  bins (0 6.25e-7 20);
+                  //     // CASMO4
+                  //     // bins (0 6.25e-7 5.53e-3 8.21e-1 20);
+                  //     // CASMO7
+                  //     // bins (0  5.8e-8  1.4e-7  6.25e-7 4e-6  5.53e-3 8.21e-1 20);
+                  //     // CASMO8
+                  //     // bins (0  5.8e-8  1.4e-7  2.8e-7  6.25e-7 4e-6  5.53e-3 8.21e-1 20);
+                  //     // CASMO16
+                  //     // bins (0 3e-8 5.8e-8 1.4e-7 2.8e-7 3.5e-7 6.25e-7 8.5e-7 9.72e-7 1.02e-6 1.097e-6 1.15e-6 1.3e-6 4e-6 5.53e-3 8.21e-1 20);
+                  //     // CASMO25
+                  //     //  bins  (0 3e-8 5.8e-8  1.4e-7  2.8e-7  3.5e-7  6.25e-7 9.72e-7 1.02e-6 1.097e-6  1.15e-6 1.855e-6  4e-6  9.877e-6  1.5968e-5 1.48728e-4  5.53e-3 9.118e-3  1.11e-1 5e-1  8.21e-1 1.353 2.231 3.679 6.0655  20);
+                  //     // CASMO40
+                  //     // bins (0 1.5e-8 3e-8 4.2e-8 5.8e-8  8e-8 1e-7 1.4e-7 1.8e-7 2.2e-7 2.8e-7 3.5e-7 6.25e-7 8.5e-7 9.5e-7 9.72e-7 1.02e-6 1.097e-6 1.15e-6  1.3e-6 1.5e-6 1.855e-6 2.1e-6  2.6e-6 3.3e-6 4e-6 9.877e-6 1.5968e-5 2.77e-5 4.8052e-5 1.48728e-4 5.53e-3 9.118e-3 1.11e-1 5e-1 8.21e-1 1.353 2.231 3.679 6.0655 20);
+                  //     // CASMO70
+                  //     bins (0  5e-9 1e-8 1.5e-8 2e-8 2.5e-8 3e-8  3.5e-8 4.2e-8 5e-8 5.8e-8  6.7e-8 8e-8 1e-7 1.4e-7 1.8e-7 2.2e-7 2.5e-7 2.8e-7  3e-7 3.2e-7 3.5e-7 4e-7 5e-7 6.25e-7 7.8e-7 8.5e-7 9.1e-7 9.5e-7 9.72e-7 9.96e-7 1.02e-6 1.045e-6 1.071e-6 1.097e-6 1.123e-6 1.15e-6 1.3e-6 1.5e-6 1.855e-6 2.1e-6 2.6e-6 3.3e-6 4e-6 9.877e-6 1.5968e-5 2.77e-5 4.8052e-5 7.55014e-5 1.48728e-4 3.67262e-4 9.06898e-4 1.4251e-3 2.23945e-3  3.519e-3 5.53e-3 9.118e-3 1.503e-2 2.478e-2 4.085e-2 6.743e-2 1.11e-1 1.83e-1 3.025e-1 5e-1 8.21e-1 1.353 2.231 3.679 6.0655 20);
+
+                  //   }
+                  //   // in MeV
+
+                  //   spaceMap
+                  //   {
+                  //     type materialMap;
+                  //     materials (Air SS304 Helium BorosilicateGlass Water Zircaloy UO2-16 UO2-31 );
+                  //   }
+          
+
+                  //   PN 1;
+                  // }
+}
+
+geometry {
+  type geometryStd;
+  // boundakry ( 2 2 2 2 1 1); // centre colourset
+  boundary ( 1 0 0 1 1 1); // edge colourset
+  graph {type shrunk;}
+
+  surfaces { 
+    // boundingSurface { id 1; type zSquareCylinder; origin (0 0 0) ; halfwidth (21.42 21.42 0);} // centre colourset
+    boundingSurface { id 1; type zSquareCylinder; origin (10.71 -10.71 0) ; halfwidth (32.13 32.13 0);} // edge colourset
+    
+   
+  }
+
+  cells {
+  }
+
+  universes {
+    root { id 1; type rootUniverse; border 1; fill u<4400>; } // colourset
+
+    // Pin universes
+    //BP 
+    pin10 { id 10; type pinUniverse; radii (0.21400 0.23051 0.24130 0.42672 0.43688 0.48387 0.56134 0.60198 0.0);
+                                     fills (Air SS304 Helium BorosilicateGlass Helium SS304 Water Zircaloy Water);}
+
+    //GT
+    pin41 { id 12; type pinUniverse; radii (0.56134 0.60198 0.0 );
+                                     fills (Water Zircaloy Water);}
+    
+    //INST Tube
+    pin51 { id 14; type pinUniverse; radii (0.43688 0.48387 .56134 0.60198 0.0 );
+                                     fills (Air Zircaloy Water Zircaloy Water);}
+
+    // fuel pins
+
+    pin16 { id 16; type pinUniverse; radii (0.39218 0.40005 0.45720 0.0);
+                                     fills (UO2-16 Helium Zircaloy Water);}
+
+    pin31 { id 31; type pinUniverse; radii (0.39218 0.40005 0.45720 0.0);
+                                     fills (UO2-31 Helium Zircaloy Water);}
+
+
+    
+    A14E31 { // 3.1% enriched assembly without BPs
+      id 1431;
+      type latUniverse;
+      origin (0.0 0.0 0.0);
+      pitch (1.26 1.26 0.0);
+      shape (17 17 0);
+      padMat Water;
+      map (
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 12 31 31 12 31 31 12 31 31 31 31 31 
+        31 31 31 12 31 31 31 31 31 31 31 31 31 12 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 12 31 31 12 31 31 12 31 31 12 31 31 12 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31
+        31 31 12 31 31 12 31 31 14 31 31 12 31 31 12 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 12 31 31 12 31 31 12 31 31 12 31 31 12 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 12 31 31 31 31 31 31 31 31 31 12 31 31 31
+        31 31 31 31 31 12 31 31 12 31 31 12 31 31 31 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 ); }
+
+
+      A14E16 { // 1.6 enriched assemnly (no BPs)
+      id 1416;
+      type latUniverse;
+      origin (0.0 0.0 0.0);
+      pitch (1.26 1.26 0.0);
+      shape (17 17 0);
+      padMat Water;
+      map (
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 16 16 16 12 16 16 12 16 16 12 16 16 16 16 16 
+        16 16 16 12 16 16 16 16 16 16 16 16 16 12 16 16 16 
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 12 16 16 12 16 16 12 16 16 12 16 16 12 16 16 
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 12 16 16 12 16 16 14 16 16 12 16 16 12 16 16
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 12 16 16 12 16 16 12 16 16 12 16 16 12 16 16
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 16 12 16 16 16 16 16 16 16 16 16 12 16 16 16
+        16 16 16 16 16 12 16 16 12 16 16 12 16 16 16 16 16
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 
+        16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16); }
+
+
+    
+
+     A20E31 { // 3.1% enriched assembly with 20 BPs
+      id 2031;
+      type latUniverse;
+      origin (0.0 0.0 0.0);
+      pitch (1.26 1.26 0.0);
+      shape (17 17 0);
+      padMat Water;
+      map (
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 10 31 31 10 31 31 10 31 31 31 31 31 
+        31 31 31 10 31 31 31 31 31 31 31 31 31 10 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 10 31 31 10 31 31 12 31 31 10 31 31 10 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31
+        31 31 10 31 31 12 31 31 14 31 31 12 31 31 10 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 10 31 31 10 31 31 12 31 31 10 31 31 10 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 
+        31 31 31 10 31 31 31 31 31 31 31 31 31 10 31 31 31
+        31 31 31 31 31 10 31 31 10 31 31 10 31 31 31 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31
+        31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 ); }
+
+
+ colourset {  
+    id 4400;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (21.42  21.42 0.0);
+    shape (2 2 0);
+    padMat Water;
+    map (
+      1416  2031
+      2031  1416
+
+    );
+
+  }
+
+ 
+
+ 
+  }
+}
+
+
+viz {
+  bmp {
+    type bmp;
+    output coloursetMaterials_MC;
+    what material;
+    centre (0.0 0.0 0.0);
+    //width (25.0 25.0);
+    axis z;
+    res (3000 3000);
+  }
+}
+
+
+nuclearData {
+  handles {
+     mgData {type baseMgNeutronDatabase;  PN P0;}
+  }
+  materials  {
+
+
+//mix of uranium and water
+Air { 
+      temp 0;
+      composition {}
+      xsFile materialsInputs/Air ;   }
+
+SS304 { 
+      temp 0;
+      composition {}
+      xsFile materialsInputs/SS304;  }
+
+Helium
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/Helium;  }
+
+BorosilicateGlass
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/BorosilicateGlass;  }
+
+Zircaloy
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/Zircaloy;  }
+
+Water
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/Water;  }
+
+UO2-16
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-16;  }
+
+UO2-31
+{ temp 0;
+  composition  {}
+  xsFile materialsInputs/UO2-31;  }
+
+
+}
+
+}

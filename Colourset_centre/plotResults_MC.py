@@ -1,13 +1,13 @@
 #from plottingFunctions import plotShannon, plotScatteringMatrices, plotFissionRatesMC, readInputs, readOutputs, plotFissionRatesRR
 from viz_neutronics.plottingFunctions import  plotSpatialTallyMC, plotSpatialTallyRR, plotFissionRatesCompareMC_RR, plotFissionRatesRR, plotSpatialTallyCompare_MCRR, plotSpatialTallyCompare_MCMG, plotSpatialMaterialTallyMC
 
-inputFileMC = 'Coloursets_MC'
-outputFileMC = 'Coloursets_MC_output.json'
-outputFileMCMG = 'Coloursets_MC_MG_output.json'
+inputFileMC = 'Colourset_MC'
+outputFileMC = 'Colourset_MC_output.json'
+outputFileMCMG = 'Colourset_MCMG_output.json'
 
 
-inputFileRR = 'Coloursets_RR'
-outputFileRR = 'Coloursets_RR_output.json'
+inputFileRR = 'Colourset_RR'
+outputFileRR = 'Colourset_RR_output.json'
 
 tallyName_MC = 'pinFiss'
 tallyName_MCMG = 'pinFiss'

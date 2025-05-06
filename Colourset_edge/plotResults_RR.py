@@ -21,6 +21,6 @@ plotSpatialTallyCompare_MCRR(outputFileMC, outputFileRR, tallyName_MC, tallyName
 
 
 
-plotSpatialTallyCompare_MCMG(outputFileMC,outputFileMCMG, tallyName_MC, tallyName_MCMG, normalise_by_mean='non-zero', response_index_CE=0, response_index_MG=0, visualise_quarter=False)
+# plotSpatialTallyCompare_MCMG(outputFileMC,outputFileMCMG, tallyName_MC, tallyName_MCMG, normalise_by_mean='non-zero', response_index_CE=0, response_index_MG=0, visualise_quarter=False)
 
 

@@ -152,9 +152,9 @@ geometry {
   }
 
   universes {
-    root { id 1; type rootUniverse; border 1; fill u<1416>; } // 1.6% enriched assembly without BPs
+    // root { id 1; type rootUniverse; border 1; fill u<1416>; } // 1.6% enriched assembly without BPs
     // root { id 1; type rootUniverse; border 1; fill u<1431>; } // 3.1% enriched assembly without BPs
-    // root { id 1; type rootUniverse; border 1; fill u<2031>; } // 3.1% enriched assembly with 20 BPs
+    root { id 1; type rootUniverse; border 1; fill u<2031>; } // 3.1% enriched assembly with 20 BPs
 
     // Pin universes
     //BP 

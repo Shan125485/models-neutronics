@@ -11,6 +11,8 @@ active   2000;
 XSdata mgData;
 dataType mg;
 
+seed  -29501819;
+
 // Specify output format default asciiMATLAB
 outputFormat asciiJSON;
 outputFile Colourset_MCMG_output;

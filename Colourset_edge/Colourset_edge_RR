@@ -4,7 +4,7 @@
 type randomRayPhysicsPackage;  // try tro specify the initial source / play with entropy 
 
 pop     50000; // need 10000 rays minimum for a fuel assembly
-active   500; // 500 //1700 
+active   1000; // 500 //1700 
 inactive 300; // 500
 dead     20;  
 termination 220;  

@@ -2,7 +2,8 @@
 from viz_neutronics.plottingFunctions import  plotSpatialTallyMC, plotSpatialTallyRR, plotFissionRatesCompareMC_RR, plotFissionRatesRR, plotSpatialTallyCompare_MCRR, plotSpatialTallyCompare_MCMG, plotSpatialMaterialTallyMC
 
 inputFileMC = 'quarterCore_MC'
-outputFileMC = 'output.json'
+# outputFileMC = 'output.json'
+outputFileMC = 'quarterCore_MC_output.json'
 # outputFileMCMG = 'Colourset_MCMG_output.json'
 
 
@@ -18,8 +19,14 @@ tallyName_MC_assem = 'assemblyFissRadial'
 
 # RR visualisation
 
-plotSpatialTallyMC(outputFileMC, tallyName_MC, normalise_by_mean='non-zero', response_index=1, visualise_quarter=False)
-plotSpatialTallyMC(outputFileMC, tallyName_MC_assem, normalise_by_mean='non-zero', response_index=1, visualise_quarter=False)
+# plotSpatialTallyMC(outputFileMC, tallyName_MC, normalise_by_mean='non-zero', response_index=1, visualise_quarter='bottom-right')
+# plotSpatialTallyMC(outputFileMC, tallyName_MC_assem, normalise_by_mean='non-zero', response_index=1, visualise_quarter='bottom-right')
+
+plotSpatialTallyMC(outputFileMC, tallyName_MC, normalise_by_mean='non-zero', response_index=0, visualise_quarter='bottom-right')
+plotSpatialTallyMC(outputFileMC, tallyName_MC_assem, normalise_by_mean='non-zero', response_index=0, visualise_quarter='bottom-right')
+
+
+
 # plotSpatialMaterialTallyMC(outputFileMC,'u238Capture', materialName='UO2-16' ,normalise_by_mean='all', response_index=0)
 # plotSpatialMaterialTallyMC(outputFileMC,'u238Capture', materialName='UO2-31' ,normalise_by_mean='all', response_index=0)
 

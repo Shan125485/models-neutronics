@@ -1,0 +1,723 @@
+type randomRayPhysicsPackage;  // try tro specify the initial source / play with entropy 
+
+pop     500000; // need 100k rays didn't work for quarter core
+active   1000; // 
+inactive 100; // 
+dead     20;  
+termination 220;  
+plot 0;
+cache 1;
+printFlux 1;
+XSdata   mg; 
+dataType mg;
+outputFormat asciiJSON;
+outputFile quarterCore_RR_output;
+
+seed  -29501819;
+rho 1; //stabilisation of negative cross sections for deterministic methods
+
+
+// fissionRate needs a fission map
+
+// fissionMap {
+
+//   type multiMap;
+//   maps (assemblies  pins);
+  
+//   assemblies {type multiMap;  maps (xax yax);
+  
+//     xax {type spaceMap;  axis x;  grid lin; N 11; min 0; max 235.62; }
+//     yax {type spaceMap;  axis y;  grid lin; N 11; min -235.62; max 0; }
+// }
+  
+//   pins {type multiMap;  maps (xax yax);
+
+//     xax {type spaceMap;  axis x;  grid lin; N 187; min 0; max 235.62; } 
+//     yax {type spaceMap;  axis y;  grid lin; N 187; min -235.62; max 0; } 
+
+//   }
+    
+// }
+
+
+fissionMap {
+type multiMap;  maps (xax yax);
+  
+      xax {type spaceMap;  axis x;  grid lin; N 187; min 0; max 235.62; } 
+      yax {type spaceMap;  axis y;  grid lin; N 187; min -235.62; max 0; } 
+  
+    
+      
+  }
+  
+
+
+// fluxMap {
+
+//     type multiMap;
+//     maps (assemblies  pins);
+    
+//     assemblies {type multiMap;  maps (xax yax);
+    
+//       xax {type spaceMap;  axis x;  grid lin; N 11; min 0; max 235.62; }
+//       yax {type spaceMap;  axis y;  grid lin; N 11; min -235.62; max 0; }}
+    
+//     pins {type multiMap;  maps (xax yax);
+  
+//       xax {type spaceMap;  axis x;  grid lin; N 187; min 0; max 235.62; } 
+//       yax {type spaceMap;  axis y;  grid lin; N 187; min -235.62; max 0; } 
+  
+//     }
+      
+//   }
+
+
+fluxMap {
+    type multiMap;  maps (xax yax);
+  
+    xax {type spaceMap;  axis x;  grid lin; N 187; min 0; max 235.62; } 
+    yax {type spaceMap;  axis y;  grid lin; N 187; min -235.62; max 0; } 
+
+  
+      
+  }
+  
+
+
+
+geometry {
+    type geometryStd;
+    boundary (1 0 0 1 2 2); // x- reflective  x+ vacuum y- vacuum y+ reflective z- periodic z+ periodic 
+    graph {type extended;} 
+  
+  surfaces {
+      boundingSurface { id 80; type zSquareCylinder; origin (145.71 -145.71 0) ; halfwidth (135 135 0);} 
+          // boundingSurface { id 80; type zSquareCylinder; origin (171.37 -171.37 0) ; halfwidth (160.65 160.65 0);} 
+      
+      coreBarrelInnerSurface {id 81; type zCylinder; origin (0 0 0); radius 224; }
+  
+      RPVInnerSurface {id 82; type zCylinder; origin (0 0 0); radius 243.5;}
+  
+      RPVOuterSurface {id 83; type zCylinder; origin (0 0 0); radius 270;}
+  
+    }
+  
+  
+    cells { 
+        // coreLattice { id 511; type simpleCell; surfaces (-80 ); filltype mat; material hotwater; }
+        coreBarrelInner {id 555; type simpleCell; surfaces (-81); filltype uni; universe 90;} // this is the cell bounded by coreBarrelInnerSurface which contains the core lattice universe
+        
+        // coreBarrel {id 556; type simpleCell; surfaces (81 -82); filltype mat; material hotwater;} //1. non discretised reflector water
+        // coreBarrel {id 556; type simpleCell; surfaces (81 -82); filltype uni; universe 92;} // 2.square disctretised reflector water
+        coreBarrel {id 556; type simpleCell; surfaces (81 -82); filltype uni; universe 57;} // 3. radially disctretised reflector water
+
+        // RPV {id 557; type simpleCell; surfaces (82 -83); filltype mat; material steel;}  //1. non discretised reflector steel
+        RPV {id 557; type simpleCell; surfaces (82 -83); filltype uni; universe 58;} // radially disctretised reflector water
+        
+        voidCell {id 558; type simpleCell; surfaces (83); filltype mat; material void;}
+    }
+  
+  
+  universes {
+    // root { id 999; type rootUniverse; border 80; fill u<90>; }
+    root {id 999; type rootUniverse; border 80; fill u<1110>;}
+    uni_cellcore  { id 1110; type cellUniverse; cells (555 556 557 558); } // ??
+  
+    // non-spatially discretised
+    // UO2_21 { id 1; type pinUniverse; radii ( 0.4095 0.418 0.475 0.0 ); fills (UOX_21 He Zrcladding hotwater);} // try without helium gap to fix the flux 
+    // UO2_32 { id 2; type pinUniverse; radii ( 0.4095 0.418 0.475 0.0 ); fills (UOX_32 He Zrcladding hotwater);} 
+    // UO2_42 { id 3; type pinUniverse; radii ( 0.4095 0.418 0.475 0.0 ); fills (UOX_42 He Zrcladding hotwater);} 
+   
+    // GdTube_21 { id 4; type pinUniverse; radii ( 0.4095 0.418 0.475 0.0 ); fills ( UOX_12_Gd2O3_8 He Zrcladding hotwater);} 
+    // GdTube_32 { id 5; type pinUniverse; radii ( 0.4095 0.418 0.475 0.0 ); fills ( UOX_19_Gd2O3_8 He Zrcladding hotwater);} 
+    // GdTube_42 { id 6; type pinUniverse; radii ( 0.4095 0.418 0.475 0.0 ); fills ( UOX_22_Gd2O3_8 He Zrcladding hotwater);}   
+    
+    // guideTube { id 8; type pinUniverse; radii (0.5725 0.6225 0.0 ); fills (hotwater  Zircalloy4 hotwater);}  
+    // water {id 9; type pinUniverse; radii (0); fills (hotwater);}
+  
+    // reflectorChannel {id 7; type pinUniverse; radii (0.736 0); fills (hotwater steel);}
+    // reflectorSteel  {id 10; type pinUniverse; radii (0); fills ( steel);}
+  
+
+    UO2_21 { id 1; type azimPinUniverse; naz 8; radii ( 0.183134 0.25899  0.317197 0.366268 0.4095 0.418 0.475 0.582168361  0.67247  0.752004 0.823896  0.0 ); fills (UOX_21 UOX_21 UOX_21 UOX_21 UOX_21 He Zrcladding hotwater hotwater hotwater hotwater hotwater);} // try without helium gap to fix the flux 
+    UO2_32 { id 2; type azimPinUniverse; naz 8; radii ( 0.183134 0.25899  0.317197 0.366268 0.4095 0.418 0.475 0.582168361  0.67247  0.752004 0.823896  0.0 ); fills (UOX_32 UOX_32 UOX_32 UOX_32 UOX_32 He Zrcladding hotwater hotwater hotwater hotwater hotwater);} 
+    UO2_42 { id 3; type azimPinUniverse; naz 8;  radii ( 0.183134 0.25899  0.317197 0.366268 0.4095 0.418 0.475 0.582168361  0.67247  0.752004 0.823896  0.0 ); fills (UOX_42 UOX_42 UOX_42 UOX_42 UOX_42 He Zrcladding hotwater hotwater hotwater hotwater hotwater);}
+   
+    GdTube_21 { id 4; type azimPinUniverse; naz 8; radii ( 0.183134 0.25899  0.317197 0.366268 0.4095 0.418 0.475 0.582168361  0.67247  0.752004 0.823896 0.0 ); fills (UOX_12_Gd2O3_8 UOX_12_Gd2O3_8 UOX_12_Gd2O3_8 UOX_12_Gd2O3_8 UOX_12_Gd2O3_8 He Zrcladding hotwater hotwater hotwater hotwater hotwater);}
+    GdTube_32 { id 5; type azimPinUniverse; naz 8; radii ( 0.183134 0.25899  0.317197 0.366268 0.4095 0.418 0.475 0.582168361  0.67247  0.752004 0.823896  0.0 ); fills (UOX_19_Gd2O3_8 UOX_19_Gd2O3_8 UOX_19_Gd2O3_8 UOX_19_Gd2O3_8 UOX_19_Gd2O3_8 He Zrcladding hotwater hotwater hotwater hotwater hotwater);}
+    GdTube_42 { id 6; type azimPinUniverse; naz 8; radii ( 0.183134 0.25899  0.317197 0.366268 0.4095 0.418 0.475 0.582168361  0.67247  0.752004 0.823896 0.0 ); fills (UOX_22_Gd2O3_8 UOX_22_Gd2O3_8 UOX_22_Gd2O3_8 UOX_22_Gd2O3_8 UOX_22_Gd2O3_8 He Zrcladding hotwater hotwater hotwater hotwater hotwater);} 
+    
+    guideTube { id 8; type azimPinUniverse; naz 8; radii (0.181040 0.25603 0.313571 0.362080 0.404819 0.443457 0.478988 0.51206 0.543121 0.5725 0.6225 0.722752 0.810700   0.0 ); fills (hotwater hotwater hotwater hotwater hotwater hotwater hotwater hotwater hotwater hotwater Zircalloy4 hotwater hotwater hotwater);}  
+    
+    water {id 9; type azimPinUniverse; naz 8; radii (0); fills (hotwater);}
+  
+    reflectorChannel {id 7; type azimPinUniverse; naz 16; radii (0.736 1.386119 1.816853 2.163466 2.461750 2.727608 2.969760 3.193604 3.402754 3.599773 0.0); fills (hotwater steel steel  steel steel steel steel steel steel steel steel);}
+
+    reflectorSteel  {id 54;type pinUniverse; radii (0); fills ( steel);}
+    reflectorWater  {id 55;type pinUniverse; radii (0); fills ( hotwater);}
+    voidPin {id 56;type pinUniverse; radii (0); fills ( void);}
+    giantWaterPin {id 57; type azimPinUniverse; naz 256; radii (224 228.0  232.0 235.9 239.7 243.5 0.0); fills (hotwater hotwater hotwater hotwater hotwater hotwater hotwater ); }
+    giantSteelPin {id 58; type azimPinUniverse; naz 256; radii ( 243.5 249.0  254.4 259.7 264.9 270  0.0); fills (steel steel steel steel steel steel steel ); }
+  
+
+        
+    //  Fuel Assembly Lattice 
+    Assembly_U21 {
+      id 20; 
+      type latUniverse;
+      origin (0.0 0.0 0.0);
+      pitch (1.26 1.26 0.0);
+      shape (17 17 0);
+      padMat hotwater;  
+      map (
+  
+      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+      1 1 1 1 1 8 1 1 8 1 1 8 1 1 1 1 1
+      1 1 1 8 1 1 1 1 1 1 1 1 1 8 1 1 1
+      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+      1 1 8 1 1 8 1 1 8 1 1 8 1 1 8 1 1
+      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+      1 1 8 1 1 8 1 1 1 1 1 8 1 1 8 1 1
+      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+      1 1 8 1 1 8 1 1 8 1 1 8 1 1 8 1 1
+      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+      1 1 1 8 1 1 1 1 1 1 1 1 1 8 1 1 1
+      1 1 1 1 1 8 1 1 8 1 1 8 1 1 1 1 1
+      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+  ); }  
+  
+    Assembly_U21_8Gd {
+    id 21; 
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (1.26 1.26 0.0);
+    shape (17 17 0);
+    padMat hotwater;  
+    map (
+    1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+    1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+    1 1 1 1 1 8 1 1 8 1 1 8 1 1 1 1 1
+    1 1 1 8 1 1 1 1 1 1 1 1 1 8 1 1 1
+    1 1 1 1 1 1 4 1 1 1 4 1 1 1 1 1 1
+    1 1 8 1 1 8 1 1 8 1 1 8 1 1 8 1 1
+    1 1 1 1 4 1 1 1 1 1 1 1 4 1 1 1 1
+    1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+    1 1 8 1 1 8 1 1 1 1 1 8 1 1 8 1 1
+    1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+    1 1 1 1 4 1 1 1 1 1 1 1 4 1 1 1 1
+    1 1 8 1 1 8 1 1 8 1 1 8 1 1 8 1 1
+    1 1 1 1 1 1 4 1 1 1 4 1 1 1 1 1 1
+    1 1 1 8 1 1 1 1 1 1 1 1 1 8 1 1 1
+    1 1 1 1 1 8 1 1 8 1 1 8 1 1 1 1 1
+    1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+    1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 ); } 
+  
+  
+  Assembly_U32_16Gd {
+    id 32;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (1.26 1.26 0.0);
+    shape (17 17 0);
+    padMat hotwater;  
+    map (
+    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+    2 2 5 2 2 8 2 2 8 2 2 8 2 2 5 2 2
+    2 2 2 8 2 2 2 5 2 5 2 2 2 8 2 2 2
+    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+    2 2 8 2 2 8 2 2 8 2 2 8 2 2 8 2 2
+    2 2 2 2 2 2 5 2 2 2 5 2 2 2 2 2 2
+    2 2 2 5 2 2 2 2 2 2 2 2 2 5 2 2 2
+    2 2 8 2 2 8 2 2 2 2 2 8 2 2 8 2 2
+    2 2 2 5 2 2 2 2 2 2 2 2 2 5 2 2 2
+    2 2 2 2 2 2 5 2 2 2 5 2 2 2 2 2 2
+    2 2 8 2 2 8 2 2 8 2 2 8 2 2 8 2 2
+    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+    2 2 2 8 2 2 2 5 2 5 2 2 2 8 2 2 2
+    2 2 5 2 2 8 2 2 8 2 2 8 2 2 5 2 2
+    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 ); } 
+  
+  Assembly_U32_20Gd {
+    id 33; 
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (1.26 1.26 0.0);
+    shape (17 17 0);
+    padMat hotwater;  
+    map (
+  2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+  2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+  2 2 5 2 2 8 2 2 8 2 2 8 2 2 5 2 2
+  2 2 2 8 2 2 2 5 2 5 2 2 2 8 2 2 2
+  2 2 2 2 5 2 2 2 2 2 2 2 5 2 2 2 2
+  2 2 8 2 2 8 2 2 8 2 2 8 2 2 8 2 2
+  2 2 2 2 2 2 5 2 2 2 5 2 2 2 2 2 2
+  2 2 2 5 2 2 2 2 2 2 2 2 2 5 2 2 2
+  2 2 8 2 2 8 2 2 2 2 2 8 2 2 8 2 2
+  2 2 2 5 2 2 2 2 2 2 2 2 2 5 2 2 2
+  2 2 2 2 2 2 5 2 2 2 5 2 2 2 2 2 2
+  2 2 8 2 2 8 2 2 8 2 2 8 2 2 8 2 2
+  2 2 2 2 5 2 2 2 2 2 2 2 5 2 2 2 2
+  2 2 2 8 2 2 2 5 2 5 2 2 2 8 2 2 2
+  2 2 5 2 2 8 2 2 8 2 2 8 2 2 5 2 2
+  2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+  2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 ); }     
+  
+  
+  Assembly_U42_16Gd {
+    id 42;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (1.26 1.26 0.0);
+    shape (17 17 0);
+    padMat hotwater;  
+    map (
+  3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+  3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+  3 3 6 3 3 8 3 3 8 3 3 8 3 3 6 3 3
+  3 3 3 8 3 3 3 6 3 6 3 3 3 8 3 3 3
+  3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+  3 3 8 3 3 8 3 3 8 3 3 8 3 3 8 3 3
+  3 3 3 3 3 3 6 3 3 3 6 3 3 3 3 3 3
+  3 3 3 6 3 3 3 3 3 3 3 3 3 6 3 3 3
+  3 3 8 3 3 8 3 3 3 3 3 8 3 3 8 3 3
+  3 3 3 6 3 3 3 3 3 3 3 3 3 6 3 3 3
+  3 3 3 3 3 3 6 3 3 3 6 3 3 3 3 3 3
+  3 3 8 3 3 8 3 3 8 3 3 8 3 3 8 3 3
+  3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+  3 3 3 8 3 3 3 6 3 6 3 3 3 8 3 3 3
+  3 3 6 3 3 8 3 3 8 3 3 8 3 3 6 3 3
+  3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+  3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 ); }     
+  
+  
+  Assembly_reflector {
+    id 11;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (5.355 5.355 0.0);
+    shape (4 4 0);
+    padMat steel;  // change to steel
+    map (
+  7 7 7 7
+  7 7 7 7
+  7 7 7 7
+  7 7 7 7 // change to a channel 
+   ); }     
+  
+  Assembly_reflector_2 {
+    id 12;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (5.355 5.355 0.0);
+    shape (4 4 0);
+    padMat steel;  
+    map (
+  7 7 7 10
+  7 7 7 10
+  7 7 7 10
+  7 7 7 10
+   
+   ); }  
+  
+  Assembly_reflector_3 {
+    id 13;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (5.355 5.355 0.0);
+    shape (4 4 0);
+    padMat steel;  
+    map (
+  7 7 7 7
+  7 7 7 7
+  7 7 7 7
+  10 10 10 10
+   
+   ); }    
+  
+  Assembly_reflector_4 {
+    id 14;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (5.355 5.355 0.0);
+    shape (4 4 0);
+    padMat steel;  
+    map (
+  10 10 10 10
+  10 10 10 10
+  10 10 10 10
+  10 10 10 10
+   
+   ); }     
+  
+  
+  Assembly_reflector_5 {
+    id 15;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (5.355 5.355 0.0);
+    shape (4 4 0);
+    padMat steel;  
+    map (
+  
+  7 7 10 10
+  7 7 10 10
+  7 7 10 10
+  7 7 10 10
+   
+   ); }    
+  
+  
+  Assembly_reflector_6 {
+    id 16;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (5.355 5.355 0.0);
+    shape (4 4 0);
+    padMat steel;  
+    map (
+  
+  7 7 7 7
+  7 7 7 7
+  10 10 10 10
+  10 10 10 10
+   
+   ); }   
+  
+  Assembly_reflector_7 {
+    id 17;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (5.355 5.355 0.0);
+    shape (4 4 0);
+    padMat steel;  
+    map (
+  
+  7 7 7 7
+  7 7 7 10
+  7 7 10 10
+  7 10 10 10
+   
+   ); }   
+  
+  Assembly_reflector_8 {
+    id 18;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (5.355 5.355 0.0);
+    shape (4 4 0);
+    padMat steel;  
+    map (
+  
+  7 7 7 7
+  7 7 7 7
+  7 7 7 7
+  7 7 7 10
+   
+   ); }   
+  
+  Assembly_reflector_9 {
+    id 19;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (5.355 5.355 0.0);
+    shape (4 4 0);
+    padMat steel;  
+    map (
+  
+  7 7 10 10
+  7 7 10 10
+  7 10 10 10
+  10 10 10 10
+   
+   ); }   
+  Assembly_reflector_10 {
+    id 50;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (5.355 5.355 0.0);
+    shape (4 4 0);
+    padMat steel;  
+    map (
+  
+  7 7 7 10
+  7 7 10 10
+  10 10 10 10
+  10 10 10 10
+   
+   ); }   
+  
+  
+  Assembly_reflector_11 {
+    id 51;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch ( 5.355 4.284 0.0);
+    shape (4 5 0);
+    padMat steel;  
+    map (
+  
+  7 7 7 7
+  7 7 7 7
+  7 7 7 7
+  7 7 7 7
+  7 7 7 7
+   
+   ); }   
+  
+  Assembly_reflector_12 {
+    id 52;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch ( 4.284 5.355 0.0);
+    shape (5 4 0);
+    padMat steel;  
+    map (
+  
+  7 7 7 7 7
+  7 7 7 7 7
+  7 7 7 7 7
+  7 7 7 7 7
+   
+   ); }   
+  
+  Assembly_reflector_13 {
+    id 53;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (5.355 5.355 0.0);
+    shape (4 4 0);
+    padMat steel;  
+    map (
+  
+  7 7 10 10
+  7 10 10 10
+  10 10 10 10
+  10 10 10 10
+   
+   ); }   
+  
+  steel_reflector_lattice {
+    id 10;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (0.5355 0.5355 0.0);
+    shape (10 10 0);
+    padMat steel;  
+    map (
+  54 54 54 54 54 54 54 54 54 54 
+  54 54 54 54 54 54 54 54 54 54 
+  54 54 54 54 54 54 54 54 54 54 
+  54 54 54 54 54 54 54 54 54 54 
+  54 54 54 54 54 54 54 54 54 54 
+  54 54 54 54 54 54 54 54 54 54 
+  54 54 54 54 54 54 54 54 54 54 
+  54 54 54 54 54 54 54 54 54 54 
+  54 54 54 54 54 54 54 54 54 54 
+  54 54 54 54 54 54 54 54 54 54 
+ 
+   ); }     
+  
+
+    water_reflector_lattice {
+    id 60;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (2.142 2.142 0.0);
+    shape (10 10 0);
+    padMat hotwater;  
+    map (
+  55 55 55 55 55 55 55 55 55 55 
+  55 55 55 55 55 55 55 55 55 55 
+  55 55 55 55 55 55 55 55 55 55 
+  55 55 55 55 55 55 55 55 55 55 
+  55 55 55 55 55 55 55 55 55 55 
+  55 55 55 55 55 55 55 55 55 55 
+  55 55 55 55 55 55 55 55 55 55 
+  55 55 55 55 55 55 55 55 55 55 
+  55 55 55 55 55 55 55 55 55 55 
+  55 55 55 55 55 55 55 55 55 55 
+ 
+   ); }     
+  
+
+   
+   
+  
+   //  CoreLattice 
+       core {
+        id 90;
+        type latUniverse;
+        origin (117.81 -117.81 0);
+        pitch (21.42 21.42 0.0);
+        shape (11 11 0);
+        padMat hotwater;  
+        map (
+  
+        20 21 32 21 33 21 33 21 42 11 14
+        21 32 21 33 20 33 21 42 42 11 14
+        32 21 32 21 32 21 33 21 42 12 14
+        21 33 21 33 20 33 21 42 42 15 14
+        33 20 32 20 33 21 21 42 51 19 14
+        21 33 21 33 21 33 42 42 17 14 14
+        33 21 33 21 21 42 42 18 14 14 14
+        21 42 21 42 42 42 18 14 11 14 14
+        42 42 42 42 52 17 14 11 11 14 14 
+        11 11 13 16 50 14 14 14 14 14 14
+        14 14 14 14 14 14 14 14 14 14 14
+        ); }
+  
+    
+   //  CoreLattice without holes in reflector
+       coreSolid {
+        id 91;
+        type latUniverse;
+        origin (117.81 -117.81 0);
+        pitch (21.42 21.42 0.0);
+        shape (11 11 0);
+        padMat hotwater;  
+        map (
+  
+        20 21 32 21 33 21 33 21 42 11 14
+        21 32 21 33 20 33 21 42 42 11 14
+        32 21 32 21 32 21 33 21 42 12 14
+        21 33 21 33 20 33 21 42 42 15 14
+        33 20 32 20 33 21 21 42 51 19 14
+        21 33 21 33 21 33 42 42 17 14 14
+        33 21 33 21 21 42 42 18 14 14 14
+        21 42 21 42 42 42 18 14 11 14 14
+        42 42 42 42 52 17 14 11 11 14 14 
+        11 11 13 16 50 14 14 14 14 14 14
+        14 14 14 14 14 14 14 14 14 14 14
+        ); }
+    
+           //  CoreLattice without holes in reflector
+       coreWaterDowncomer {
+        id 92;
+        type latUniverse;
+        origin (107.1 -107.1 0);
+        pitch (21.42 21.42 0.0);
+        shape (12 12 0);
+        padMat hotwater;  
+        map (
+  
+        56 56 56 56 56 56 56 56 56 56 60 60
+        56 56 56 56 56 56 56 56 56 56 60 60
+        56 56 56 56 56 56 56 56 56 56 60 60
+        56 56 56 56 56 56 56 56 56 60 60 60
+        56 56 56 56 56 56 56 56 56 60 60 60
+        56 56 56 56 56 56 56 56 60 60 60 60
+        56 56 56 56 56 56 56 60 60 60 60 60
+        56 56 56 56 56 56 60 60 60 60 60 60
+        60 60 60 60 60 60 60 60 60 60 60 60
+        60 60 60 60 60 60 60 60 60 60 60 60
+        60 60 60 60 60 60 60 60 60 60 60 60
+        60 60 60 60 60 60 60 60 60 60 60 60
+
+        ); }
+       
+        
+          
+    }
+  
+  
+  }
+
+  viz {
+  bmpID { 
+    type bmp;
+    output quarterCore_RR_id;
+    what uniqueID; 
+    centre (0.0 0.0 0); 
+    axis z; 
+    res (5000 5000);  }
+
+  bmpMat { 
+    type bmp; 
+    output quarterCore_RR_mat; 
+    what material; 
+    centre (0.0 0.0 0); 
+    axis z; 
+    res (2000 2000);  }
+
+
+  }
+
+nuclearData {
+    handles {
+      mg {type baseMgNeutronDatabase; PN P0;}
+    }
+  
+  materials {
+  
+  
+  //mix of uranium and water
+  UOX_21 { 
+        temp 0;
+        composition {}
+        xsFile materialsInputs/UOX_21 ;   }
+  
+        UOX_32 { 
+        temp 0;
+        composition {}
+        xsFile materialsInputs/UOX_32;  }
+  
+    UOX_42
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UOX_42;  }
+  
+UOX_12_Gd2O3_8
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UOX_12_Gd2O3_8;  }
+  
+    UOX_19_Gd2O3_8
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UOX_19_Gd2O3_8;  }
+  
+    UOX_22_Gd2O3_8
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/UOX_22_Gd2O3_8;  }
+  
+  He
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/He;  }
+  
+    Zrcladding
+  { temp 0;
+    composition  {}
+    xsFile materialsInputs/Zrcladding;  }
+
+    Zircalloy4
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/Zircalloy4;  }
+
+      hotwater
+    { temp 0;
+      composition  {}
+      xsFile materialsInputs/hotwater;  }
+  
+  
+
+      steel
+      { temp 0;
+        composition  {}
+        xsFile materialsInputs/steel;  }
+    
+    
+  }
+  
+    
+  }

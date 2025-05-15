@@ -4,7 +4,7 @@
 type eigenPhysicsPackage; // try tro specifgy the initial source / play with entropy 
 
 pop      500000; // 500k
-active   2000;  // 5k
+active   10000;  // 5k
 inactive 100; // seems to converge by about 40 
 XSdata ce; 
 dataType ce;
@@ -87,7 +87,7 @@ activeTally {
                       spaceMap
                     {
                       type materialMap;
-                      materials (UOX_21 UOX_32 UOX_42 UOX_12_Gd2O3_8 UOX_19_Gd2O3_8 UOX_22_Gd2O3_8 He Zrcladding Zircalloy4 steel hotwater);
+                      materials (UOX_21 UOX_32 UOX_42 UOX_12_Gd2O3_8 UOX_19_Gd2O3_8 UOX_22_Gd2O3_8 He Zrcladding Zircalloy4 steel hotwater water_downcomer  water_reflector_channel steel_RPV);
                     }
                   PN 1;
 
@@ -117,8 +117,8 @@ surfaces {
   cells { 
       // coreLattice { id 511; type simpleCell; surfaces (-80 ); filltype mat; material hotwater; }
       coreBarrelInner {id 555; type simpleCell; surfaces (-81); filltype uni; universe 90;} // this is the cell bounded by coreBarrelInnerSurface which contains the core lattice universe
-      coreBarrel {id 556; type simpleCell; surfaces (81 -82); filltype mat; material hotwater;}
-      RPV {id 557; type simpleCell; surfaces (82 -83); filltype mat; material steel;}
+      coreBarrel {id 556; type simpleCell; surfaces (81 -82); filltype mat; material water_downcomer;}
+      RPV {id 557; type simpleCell; surfaces (82 -83); filltype mat; material steel_RPV;}
       voidCell {id 558; type simpleCell; surfaces (83); filltype mat; material void;}
   }
 
@@ -140,8 +140,9 @@ universes {
   guideTube { id 8; type pinUniverse; radii (0.5725 0.6225 0.0 ); fills (hotwater  Zircalloy4 hotwater);}  
   water {id 9; type pinUniverse; radii (0); fills (hotwater);}
 
-  reflectorChannel {id 7; type pinUniverse; radii (0.736 0); fills (hotwater steel);}
+  reflectorChannel {id 7; type pinUniverse; radii (0.736 0); fills (water_reflector_channel steel);}
   reflectorSteel  {id 10; type pinUniverse; radii (0); fills ( steel);}
+
 
       
   //  Fuel Assembly Lattice 
@@ -550,7 +551,7 @@ viz {
 
   bmpz {
     type bmp;
-    output mat_MC;
+    output quarterCore_MC_mat;
     what material;
     centre (0.0 0.0 0.0);
     axis z;
@@ -741,9 +742,49 @@ hotwater {
 
 }
 
+water_downcomer {
+  temp 312.7;
+   //  moder {1001.06 lwj3.11; }  // ENDFB 7.1
+      moder { 1001.03 hh2o.03; } // JEFF 3.3
+      composition {
+      1001.03 0.046664;
+      8016.03 0.023332;
+      5010.03 9.13830E-06;
+      5011.03 3.6553E-05;}
+
+}
+
+water_reflector_channel {
+  temp 312.7;
+   //  moder {1001.06 lwj3.11; }  // ENDFB 7.1
+      moder { 1001.03 hh2o.03; } // JEFF 3.3
+      composition {
+      1001.03 0.046664;
+      8016.03 0.023332;
+      5010.03 9.13830E-06;
+      5011.03 3.6553E-05;}
+
+}
+
 
 
 steel {
+  temp 312.7;
+      composition { // ASTM A508 Class 3
+      26056.03	8.68E-02	;
+      // 6012.06	9.72E-04	; 
+      6000.03	9.72E-04	; // use 'natural carbon' rather tha carbon 12 at 300K? JEFF3.3 database...
+      25052.03	1.10E-03	;
+      14028.03	4.50E-04	;
+      28059.03	5.54E-04	;
+      24052.03	2.24E-04	;
+      42096.03	2.53E-04	;
+
+      }
+
+}
+
+steel_RPV {
   temp 312.7;
       composition { // ASTM A508 Class 3
       26056.03	8.68E-02	;

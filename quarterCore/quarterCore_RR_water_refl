@@ -161,7 +161,7 @@ geometry {
     voidPin {id 56;type pinUniverse; radii (0); fills ( void);}
     // giantWaterPin {id 57; type azimPinUniverse; naz 256; radii (224 228.0  232.0 235.9 239.7 243.5 0.0); fills (hotwater hotwater hotwater hotwater hotwater hotwater hotwater ); }
     // giantSteelPin {id 58; type azimPinUniverse; naz 256; radii ( 243.5 249.0  254.4 259.7 264.9 270  0.0); fills (steel steel steel steel steel steel steel ); }
-    giantWaterPin {id 57; type azimPinUniverse; naz 256; radii (224 228.0  232.0 235.9 239.7 243.5 0.0); fills (water_downcomer water_downcomer water_downcomer water_downcomer water_downcomer water_downcomer water_downcomer ); }
+    giantWaterPin {id 57; type azimPinUniverse; naz 256; radii (224 228.0  232.0 235.9 239.7 243.5 0.0); fills (hotwater hotwater hotwater hotwater hotwater hotwater hotwater); }
     giantSteelPin {id 58; type azimPinUniverse; naz 256; radii ( 243.5 249.0  254.4 259.7 264.9 270  0.0); fills (steel_RPV steel_RPV steel_RPV steel_RPV steel_RPV steel_RPV steel_RPV ); }
   
 
@@ -552,6 +552,37 @@ geometry {
  
    ); }     
   
+    water_reflector_lattice_fine {
+    id 61;
+    type latUniverse;
+    origin (0.0 0.0 0.0);
+    pitch (1.071 1.071 0.0);
+    shape (20 20 0);
+    padMat hotwater;  
+    map (
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55
+  55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 
+ 
+   ); }     
+  
 
    
    
@@ -566,17 +597,17 @@ geometry {
         padMat hotwater;  
         map (
   
-        20 21 32 21 33 21 33 21 42 11 14
-        21 32 21 33 20 33 21 42 42 11 14
-        32 21 32 21 32 21 33 21 42 12 14
-        21 33 21 33 20 33 21 42 42 15 14
-        33 20 32 20 33 21 21 42 51 19 14
-        21 33 21 33 21 33 42 42 17 14 14
-        33 21 33 21 21 42 42 18 14 14 14
-        21 42 21 42 42 42 18 14 11 14 14
-        42 42 42 42 52 17 14 11 11 14 14 
-        11 11 13 16 50 14 14 14 14 14 14
-        14 14 14 14 14 14 14 14 14 14 14
+        20 21 32 21 33 21 33 21 42 61 60
+        21 32 21 33 20 33 21 42 42 61 60
+        32 21 32 21 32 21 33 21 42 61 60
+        21 33 21 33 20 33 21 42 42 61 60
+        33 20 32 20 33 21 21 42 61 61 60
+        21 33 21 33 21 33 42 42 61 60 60
+        33 21 33 21 21 42 42 61 61 60 60
+        21 42 21 42 42 42 61 61 60 60 60
+        42 42 42 42 61 61 61 60 60 60 60 
+        61 61 61 61 61 60 60 60 60 60 60
+        60 60 60 60 60 60 60 60 60 60 60
         ); }
   
     
@@ -603,7 +634,7 @@ geometry {
         14 14 14 14 14 14 14 14 14 14 14
         ); }
     
-           //  CoreLattice without holes in reflector
+           //  CoreLattice with discretised reflector (square)
        coreWaterDowncomer {
         id 92;
         type latUniverse;
@@ -642,7 +673,7 @@ geometry {
     what uniqueID; 
     centre (0.0 0.0 0); 
     axis z; 
-    res (20000 20000);  }
+    res (8000 8000);  }
 
   bmpMat { 
     type bmp; 
@@ -650,7 +681,7 @@ geometry {
     what material; 
     centre (0.0 0.0 0); 
     axis z; 
-    res (50 50);  } // should be 5000
+    res (5000 5000);  }
 
 
   }
